@@ -34,59 +34,64 @@ export default function AboutManifesto({ lang }: { lang: "fr" | "en" }) {
   );
 
   return (
-  <section
-  ref={manifestoRef}
-  className="relative w-full py-32 md:py-48 px-6 md:px-24 flex justify-center border-t border-zinc-300/30"
->
-  <div className="max-w-5xl text-3xl md:text-6xl font-black uppercase tracking-tighter leading-[1.1]">
-    {lang === "fr" ? (
-      <>
-        <span className="bio-line inline-block">
-          Expert en stratégie et
-        </span>{" "}
-        <span className="bio-line inline-block text-[#8ea522]">
-          communication digitale,
-        </span>{" "}
-        <span className="bio-line inline-block">
-          je fusionne vision créative
-        </span>{" "}
-        <span className="bio-line inline-block">et outils techniques.</span>{" "}
-        <span className="bio-line inline-block mt-8">
-          Mon but est de valoriser
-        </span>{" "}
-        <span className="bio-line inline-block">
-          l'image de marque
-        </span>{" "}
-        <span className="bio-line inline-block">
-          et de maximiser
-        </span>{" "}
-        <span className="bio-line inline-block">
-          l'impact de vos messages.
-        </span>
-      </>
-    ) : (
-      <>
-        <span className="bio-line inline-block">
-          Specialist in strategy and
-        </span>{" "}
-        <span className="bio-line inline-block text-[#8ea522]">
-          digital communication,
-        </span>{" "}
-        <span className="bio-line inline-block">
-          I merge creative vision
-        </span>{" "}
-        <span className="bio-line inline-block">with technical tools.</span>{" "}
-        <span className="bio-line inline-block mt-8">
-          My goal is to enhance
-        </span>{" "}
-        <span className="bio-line inline-block">brand identity</span>{" "}
-        <span className="bio-line inline-block">and to maximize</span>{" "}
-        <span className="bio-line inline-block">
-          your message's impact.
-        </span>
-      </>
-    )}
-  </div>
-</section>
+    <section
+      ref={manifestoRef}
+      className="relative w-full py-24 md:py-48 px-6 md:px-24 flex justify-center border-t border-zinc-300/30 bg-[#EBE9E0]"
+    >
+      <div className="max-w-5xl text-[7.5vw] md:text-6xl font-black uppercase tracking-tighter leading-[1.1] text-zinc-900">
+        {lang === "fr" ? (
+          <div className="flex flex-wrap gap-x-[1.5vw]">
+            <span className="bio-line inline-block">Expert en stratégie et</span>{" "}
+            <span className="bio-line inline-block text-[#8ea522]">
+              communication digitale,
+            </span>{" "}
+            <span className="bio-line inline-block">
+              je fusionne vision créative
+            </span>{" "}
+            <span className="bio-line inline-block">et outils techniques.</span>{" "}
+            
+            {/* Espaceur pour le saut de ligne sur mobile et desktop */}
+            <span className="w-full h-6 md:h-12"></span>
+
+            <span className="bio-line inline-block">
+              Mon but est de valoriser
+            </span>{" "}
+            <span className="bio-line inline-block">
+              l'image de marque
+            </span>{" "}
+            <span className="bio-line inline-block">
+              et de maximiser
+            </span>{" "}
+            <span className="bio-line inline-block">
+              l'impact de vos messages.
+            </span>
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-x-[1.5vw]">
+            <span className="bio-line inline-block">
+              Specialist in strategy and
+            </span>{" "}
+            <span className="bio-line inline-block text-[#8ea522]">
+              digital communication,
+            </span>{" "}
+            <span className="bio-line inline-block">
+              I merge creative vision
+            </span>{" "}
+            <span className="bio-line inline-block">with technical tools.</span>{" "}
+
+            <span className="w-full h-6 md:h-12"></span>
+
+            <span className="bio-line inline-block">
+              My goal is to enhance
+            </span>{" "}
+            <span className="bio-line inline-block">brand identity</span>{" "}
+            <span className="bio-line inline-block">and to maximize</span>{" "}
+            <span className="bio-line inline-block">
+              your message's impact.
+            </span>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }

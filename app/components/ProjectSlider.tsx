@@ -1,69 +1,52 @@
 "use client";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 
-interface ProjectSliderProps {
-  projects: any[];
-  activeIndex: number;
-  setActiveIndex: (index: number) => void;
-  isExploring: boolean;
-}
+export default function ProjectSlider({ projects, activeIndex, setActiveIndex, isExploring }: any) {
+  const [isMobile, setIsMobile] = useState(false);
+  const startX = useRef(0);
 
-export default function ProjectSlider({
-  projects,
-  activeIndex,
-  setActiveIndex,
-  isExploring,
-}: ProjectSliderProps) {
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const handleStart = (e: any) => { startX.current = e.clientX || (e.touches && e.touches[0].clientX); };
+  const handleEnd = (e: any) => {
+    const endX = e.clientX || (e.changedTouches && e.changedTouches[0].clientX);
+    const diff = startX.current - endX;
+    if (isExploring || Math.abs(diff) < 50) return;
+    if (diff > 0 && activeIndex < projects.length - 1) setActiveIndex(activeIndex + 1);
+    else if (diff < 0 && activeIndex > 0) setActiveIndex(activeIndex - 1);
+  };
+
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 overflow-hidden">
-      {projects.map((proj, index) => {
+    <div 
+      className={`flex items-center justify-center z-10 select-none 
+        ${isExploring && isMobile ? "relative h-[40vh] my-10" : "absolute inset-0 overflow-hidden"}`}
+      onMouseDown={handleStart} onMouseUp={handleEnd} onTouchStart={handleStart} onTouchEnd={handleEnd}
+      style={{ pointerEvents: isExploring && isMobile ? "none" : "auto" }}
+    >
+      {projects.map((proj: any, index: number) => {
         const offset = index - activeIndex;
         const isActive = offset === 0;
-
-        const translateX = isExploring
-          ? isActive
-            ? 22
-            : offset * 110
-          : offset * 55;
-        const scale = isActive ? 1 : 0.75;
-        const zIndex = isActive ? 20 : 10 - Math.abs(offset);
-        const opacity =
-          (isExploring && !isActive) || Math.abs(offset) > 1 ? 0 : 1;
-        const innerTranslateX = isExploring && isActive ? 0 : offset * -15;
+        const translateX = isExploring ? (isActive ? (isMobile ? 0 : 15) : offset * 110) : (isMobile ? offset * 75 : offset * 55);
+        const opacity = (isExploring && !isActive) || Math.abs(offset) > 1 ? 0 : (isActive ? 1 : 0.4);
 
         return (
-          <div
-            key={proj.id}
-            onClick={() => {
-              if (!isActive && !isExploring) setActiveIndex(index);
-            }}
-            className={`absolute transition-all duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)] shadow-2xl flex items-center justify-center
-              ${!isActive && !isExploring ? "cursor-pointer pointer-events-auto group" : ""}
-              ${isActive ? "pointer-events-auto" : ""}
-            `}
+          <div key={proj.id} className="absolute transition-all duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)] shadow-2xl"
             style={{
-              width: isExploring && isActive ? "58vw" : "50vw",
-              height: isExploring && isActive ? "78vh" : "65vh",
-              transform: `translateX(${translateX}vw) scale(${scale})`,
-              opacity: opacity,
-              zIndex: zIndex,
-            }}
-          >
+              width: isMobile ? "80vw" : (isExploring && isActive ? "35vw" : "40vw"),
+              height: isMobile ? "30vh" : (isExploring && isActive ? "45vh" : "40vh"),
+              top: "50%", left: "50%",
+              transform: `translate(calc(-50% + ${translateX}vw), -50%) scale(${isActive ? 1 : 0.8})`,
+              opacity: opacity, zIndex: isActive ? 20 : 10,
+            }}>
             <div className="relative w-full h-full overflow-hidden bg-zinc-900 rounded-sm">
-              <Image
-                src={proj.image}
-                alt={proj.title}
-                fill
-                className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)]"
-                style={{
-                  transform: `translateX(${innerTranslateX}%) scale(1.15)`,
-                }}
-                sizes="(max-width: 768px) 100vw, 60vw"
-                priority={isActive}
-              />
-              <div
-                className={`absolute inset-0 bg-black pointer-events-none transition-opacity duration-700 ease-out ${isActive ? "opacity-0" : "opacity-60 group-hover:opacity-30"}`}
-              />
+              <Image src={proj.image} alt={proj.title} fill className="object-cover" priority={isActive} />
+              {!isActive && <div className="absolute inset-0 bg-black opacity-50" />}
             </div>
           </div>
         );

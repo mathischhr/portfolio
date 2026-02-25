@@ -9,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function SkillsHorizontal() {
   const container = useRef(null);
-  // On précise le type (HTMLDivElement) pour être plus propre
   const slider = useRef<HTMLDivElement>(null);
   const { lang } = useLanguage();
 
@@ -56,29 +55,33 @@ export default function SkillsHorizontal() {
       items:
         lang === "fr"
           ? ["Captation Vidéo", "Montage & Colorimétrie", "Shooting Photo", "Post-production"]
-          : ["Video Produdction", "Editing & Color Grading", "Photo Shoots", "Post-production"],
+          : ["Video Production", "Editing & Color Grading", "Photo Shoots", "Post-production"],
     },
   ];
 
   useGSAP(
     () => {
-      // SÉCURITÉ ANTI-CRASH : On empêche GSAP de se lancer si la div n'est pas encore rendue
-      if (!slider.current) return;
+      if (!slider.current || !container.current) return;
 
-      // Recalcul de la taille
-      const getWidth = () => (slider.current ? slider.current.scrollWidth : 0);
+      let mm = gsap.matchMedia();
 
-      gsap.to(slider.current, {
-        x: () => -(getWidth() - window.innerWidth),
-        ease: "none",
-        scrollTrigger: {
-          trigger: container.current,
-          pin: true,
-          scrub: 1,
-          end: () => "+=" + getWidth() * 1.5,
-          invalidateOnRefresh: true,
-        },
+      mm.add("(min-width: 768px)", () => {
+        const getWidth = () => (slider.current ? slider.current.scrollWidth : 0);
+
+        gsap.to(slider.current, {
+          x: () => -(getWidth() - window.innerWidth),
+          ease: "none",
+          scrollTrigger: {
+            trigger: container.current,
+            pin: true,
+            scrub: 1,
+            end: () => "+=" + getWidth(),
+            invalidateOnRefresh: true,
+          },
+        });
       });
+
+      return () => mm.revert();
     },
     { scope: container, dependencies: [lang] },
   );
@@ -87,45 +90,46 @@ export default function SkillsHorizontal() {
     <section
       id="skills"
       ref={container}
-      className="h-screen overflow-hidden bg-white text-zinc-900 relative border-y border-zinc-100"
+      className="relative min-h-screen md:h-screen md:overflow-hidden bg-white text-zinc-900 border-y border-zinc-100 py-16 md:py-0"
     >
-      <div className="absolute top-12 left-12 z-20">
-        <h2 className="text-5xl font-bold tracking-tighter">
+      {/* TITRE : Ajout de padding-top et padding-left pour mobile */}
+      <div className="md:absolute top-12 left-0 md:left-12 z-20 mb-10 md:mb-0 px-8 md:px-0">
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tighter">
           {lang === "fr" ? "Mes compétences" : "My Skills"}
         </h2>
       </div>
 
+      {/* Slider : Colonne sur mobile, Ligne sur PC */}
       <div
         ref={slider}
-        className="flex h-full w-fit items-center px-[10vw] md:px-[20vw]"
+        className="flex flex-col md:flex-row h-full w-full md:w-fit items-center px-6 md:px-[20vw] gap-8 md:gap-4"
       >
         {skills.map((skill, index) => (
           <div
             key={index}
-            className="group relative w-[85vw] md:w-[45vw] h-[60vh] mx-4 p-12 bg-zinc-50 border border-zinc-200 rounded-3xl overflow-hidden flex flex-col justify-center transition-all duration-500 ease-out hover:-translate-y-4 hover:shadow-[0_20px_40px_-15px_rgba(234,116,63,0.15)] hover:border-[#ea743f]/30 hover:bg-white cursor-default"
+            className="group relative w-full md:w-[45vw] min-h-[480px] md:h-[60vh] p-8 md:p-12 bg-zinc-50 border border-zinc-200 rounded-3xl overflow-hidden flex flex-col justify-center transition-all duration-500 ease-out hover:border-[#ea743f]/30 hover:bg-white shadow-sm md:shadow-none"
           >
-            <span className="absolute -bottom-10 -right-10 text-[15rem] font-black text-zinc-100/80 leading-none pointer-events-none z-0 transition-all duration-700 ease-out group-hover:scale-110 group-hover:-translate-y-8 group-hover:text-zinc-100">
+            {/* Numéro décoratif */}
+            <span className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 text-[8rem] md:text-[15rem] font-black text-zinc-100/80 leading-none pointer-events-none z-0">
               0{index + 1}
             </span>
 
             <div className="z-10 relative">
-              <h3 className="text-4xl font-bold mb-4 text-[#ea743f] transition-transform duration-500 ease-out group-hover:translate-x-3">
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-[#ea743f]">
                 {skill.cat}
               </h3>
-              <p className="text-zinc-500 mb-8 text-lg max-w-sm transition-colors duration-500 group-hover:text-zinc-700">
+              <p className="text-zinc-500 mb-8 text-base md:text-lg max-w-sm">
                 {skill.desc}
               </p>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                 {skill.items.map((item, i) => (
                   <div
                     key={i}
-                    className="group/pill flex items-center text-zinc-800 font-medium bg-white py-3 px-4 rounded-xl shadow-sm border border-zinc-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#ea743f]/30 cursor-crosshair"
+                    className="flex items-center text-zinc-800 font-medium bg-white py-3 px-4 rounded-xl shadow-sm border border-zinc-100 text-sm md:text-base"
                   >
-                    <span className="w-2 h-2 rounded-full bg-[#bf8b4d] mr-3 transition-all duration-300 group-hover/pill:scale-150 group-hover/pill:bg-[#ea743f]"></span>
-                    <span className="transition-colors duration-300 group-hover/pill:text-[#ea743f]">
-                      {item}
-                    </span>
+                    <span className="w-2 h-2 rounded-full bg-[#bf8b4d] mr-3"></span>
+                    <span>{item}</span>
                   </div>
                 ))}
               </div>
