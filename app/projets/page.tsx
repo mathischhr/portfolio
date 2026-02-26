@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { projectsData } from "../data/projectsData";
 import ProjectUI from "../components/ProjectUI";
@@ -57,10 +57,12 @@ export default function ProjectsPage() {
 
   return (
     <main
-      className="relative w-screen h-screen overflow-hidden transition-colors duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)]"
+      className={`relative w-screen h-screen transition-colors duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${
+        isExploring ? "overflow-y-auto" : "overflow-hidden"
+      }`}
       style={{ backgroundColor: activeProject.bgColor }}
     >
-      {/* PAGINATION : Masquée en mode Explore */}
+      {/* PAGINATION */}
       {!isExploring && (
         <div
           className="absolute top-28 md:top-32 left-1/2 -translate-x-1/2 flex items-center gap-4 font-mono text-xs opacity-70 z-50 pointer-events-none transition-opacity duration-500"
@@ -79,8 +81,12 @@ export default function ProjectsPage() {
         </div>
       )}
 
+      {/* CORRECTED: On ajoute les props manquantes ici */}
       <ProjectUI
         project={activeProject}
+        projects={projectsData}
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
         lang={lang}
         isExploring={isExploring}
         setIsExploring={setIsExploring}
@@ -93,31 +99,42 @@ export default function ProjectsPage() {
         isExploring={isExploring}
       />
 
-      {/* MINIATURES LATÉRALES */}
+      {/* MINIATURES PC (Caché sur mobile car géré par ProjectUI maintenant) */}
       <div
-        className={`absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-4 p-8 h-[80vh] overflow-y-auto z-50 transition-all duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${
-          isExploring
-            ? "translate-x-0 opacity-100 pointer-events-auto"
-            : "translate-x-full opacity-0 pointer-events-none"
-        }`}
-        style={{ scrollbarWidth: "none" }}
+        className={`
+          transition-all duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)] z-50
+          ${isExploring 
+            ? "opacity-100 translate-y-0" 
+            : "opacity-0 translate-y-10 pointer-events-none"}
+          
+          hidden md:flex md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:flex-col md:h-[80vh] md:p-8
+        `}
       >
-        {projectsData.map((proj, idx) => (
-          <button
-            key={proj.id}
-            onClick={() => setActiveIndex(idx)}
-            className={`relative w-24 h-16 md:w-32 md:h-20 flex-shrink-0 overflow-hidden cursor-pointer transition-all duration-500 hover:scale-105 ${activeIndex === idx ? "border-2" : "opacity-50 hover:opacity-100"}`}
-            style={{ borderColor: activeProject.textColor }}
-          >
-            <Image
-              src={proj.image}
-              alt={proj.title}
-              fill
-              className="object-cover"
-              sizes="150px"
-            />
-          </button>
-        ))}
+        <div 
+          className="flex flex-col gap-4 overflow-y-auto no-scrollbar"
+          style={{ scrollbarWidth: "none" }}
+        >
+          {projectsData.map((proj, idx) => (
+            <button
+              key={proj.id}
+              onClick={() => setActiveIndex(idx)}
+              className={`
+                relative flex-shrink-0 overflow-hidden cursor-pointer transition-all duration-500 hover:scale-105
+                w-32 h-20 
+                ${activeIndex === idx ? "border-2" : "opacity-40 hover:opacity-100"}
+              `}
+              style={{ borderColor: activeProject.textColor }}
+            >
+              <Image
+                src={proj.image}
+                alt={proj.title}
+                fill
+                className="object-cover"
+                sizes="150px"
+              />
+            </button>
+          ))}
+        </div>
       </div>
     </main>
   );

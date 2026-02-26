@@ -30,7 +30,7 @@ export const projectsData = [
       "Store communication redesign, WordPress website creation, and print materials.",
     image: "/siteppp.jpg",
     bgColor: "#D95C50", // Rouge brique / Corail vibrant
-    textColor: "#F4F1DE", // Crème / Blanc cassé
+    textColor: "#ebd229", // Crème / Blanc cassé
   },
 
   // 3. Y SCHOOLS (Corporate / LinkedIn)
@@ -80,7 +80,7 @@ export const projectsData = [
     descEn:
       "Presentation of the MMI program adopting the dynamic and viral communication codes of web content creators (YouTuber style).",
     image: "/mmiyoutube.jpg",
-    bgColor: "#EEEEEE", // Gris très clair (Interface UI claire)
+    bgColor: "#1a1f29", // Gris très clair (Interface UI claire)
     textColor: "#DC2626", // Rouge vif (Le rouge iconique de YouTube)
   },
 
