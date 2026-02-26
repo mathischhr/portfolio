@@ -14,24 +14,24 @@ export default function Projects() {
   const { lang } = useLanguage();
 
   const projects = [
-    {
-      title: "Utopia",
-      role: lang === "fr" ? "Identité Visuelle & Direction Artistique" : "Visual Identity & Art Direction",
-      desc: lang === "fr" ? "Création complète de la charte graphique pour un cinéma d'art et d'essai." : "Complete creation of the visual identity and guidelines for an art house cinema.",
-      image: "/charte_utopia_Page_1.jpg",
-    },
-    {
-      title: "Phnom Penh",
-      role: lang === "fr" ? "Web & Print" : "Web & Print Design",
-      desc: lang === "fr" ? "Refonte de la communication du magasin, création du site WordPress et supports print." : "Store communication redesign, WordPress website creation, and print materials.",
-      image: "/siteppp.jpg",
-    },
-    {
-      title: "Y SCHOOLS",
-      role: lang === "fr" ? "Communication Globale" : "Global Communication",
-      desc: lang === "fr" ? "Déploiement du plan de communication, événementiel et gestion des réseaux sociaux." : "Deployment of the communication plan, events, and social media management.",
-      image: "/linkedin.jpg",
-    },
+{
+  title: lang === "fr" ? "ÉVÉNEMENTIEL & COMMUNICATION" : "EVENTS & COMMUNICATION",
+  role: lang === "fr" ? "Organisateur & Chargé de communication" : "Event Planner & Communication Manager",
+  desc: lang === "fr" ? "Organisation de la danse du lion pour le Nouvel An Chinois : coordination logistique, création graphique et captation vidéo." : "Organization of the Chinese New Year lion dance: logistics, graphic design, and video production.",
+  image: "/danse-lion4.jpg",
+},
+{
+  title: lang === "fr" ? "COMMUNICATION GLOBALE" : "GLOBAL COMMUNICATION",
+  role: lang === "fr" ? "Chargé de communication" : "Communication Officer",
+  desc: lang === "fr" ? "Déploiement de la stratégie digitale, événementielle et print : création de contenus, gestion CRM et optimisation SEO." : "Deployment of digital, event, and print strategies: content creation, CRM management, and SEO optimization.",
+  image: "/yschools.jpg",
+},
+{
+  title: lang === "fr" ? "AUDIOVISUEL & RÉALISATION" : "AUDIOVISUAL & FILMMAKING",
+  role: lang === "fr" ? "Storyboarder & Chef éclairagiste" : "Storyboarder & Gaffer",
+  desc: lang === "fr" ? "Réalisation d'une interview immersive sur le Tricking : conception visuelle, mise en lumière et coordination technique." : "Creation of an immersive Tricking interview: visual design, lighting, and technical coordination.",
+  image: "/interview.jpg",
+},
   ];
 
   useGSAP(
