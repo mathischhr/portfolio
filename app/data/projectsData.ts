@@ -1,137 +1,93 @@
 export const projectsData = [
-  // 1. UTOPIA (Cinéma)
-  // Ambiance : Salles obscures, élégance, festival de cinéma.
   {
-    id: "utopia",
-    title: "UTOPIA",
-    client: "Cinéma Utopia",
-    role: "Identité Visuelle & DA",
-    date: "Mars 2024",
-    descFr:
-      "Création complète de la charte graphique pour un cinéma d'art et d'essai. Travail sur la typographie et l'ambiance visuelle.",
-    descEn:
-      "Complete creation of the visual identity and guidelines for an art house cinema. Focus on typography and visual mood.",
-    image: "/charte_utopia_Page_1.jpg",
-    bgColor: "#121212", // Noir très profond (salle de cinéma)
-    textColor: "#E5C07B", // Or vieilli / Doré (élégance, palme d'or)
-  },
-
-  // 2. PHNOM PENH (Web)
-  // Ambiance : Asie, épices, chaleur, modernité. (Couleurs de tes précédentes maquettes)
-  {
-    id: "ppm-site",
-    title: "PHNOM PENH",
-    client: "Phnom Penh Market",
-    role: "Web Design & Dev",
-    date: "Mai 2024",
-    descFr:
-      "Refonte de la communication du magasin, création du site WordPress et supports print.",
-    descEn:
-      "Store communication redesign, WordPress website creation, and print materials.",
-    image: "/siteppp.jpg",
-    bgColor: "#D95C50", // Rouge brique / Corail vibrant
-    textColor: "#ebd229", // Crème / Blanc cassé
-  },
-
-  // 3. Y SCHOOLS (Corporate / LinkedIn)
-  // Ambiance : Institutionnel, sérieux, réseaux professionnels.
-  {
-    id: "yschools",
+    id: "yschools-comm",
     title: "Y SCHOOLS",
-    client: "Groupe Y Schools",
-    role: "Communication Globale",
-    date: "Février 2025",
-    descFr:
-      "Déploiement du plan de communication, événementiel et gestion des réseaux sociaux.",
-    descEn:
-      "Deployment of the communication plan, events, and social media management.",
-    image: "/linkedin.jpg",
-    bgColor: "#0F172A", // Bleu nuit très institutionnel (Slate 900)
-    textColor: "#38BDF8", // Bleu ciel (Sky 400 - rappelle LinkedIn)
+    client: "Alternance / Stage",
+    role: "Chargé de Communication",
+    date: "2026",
+    descFr: "Déploiement d’une stratégie globale : création de contenus print/digital, gestion des réseaux sociaux, SEO et pilotage CRM.",
+    descEn: "Deployment of a global strategy: print/digital content creation, social media management, SEO, and CRM monitoring.",
+    image: "/yschools.jpg",
+    link: "https://www.linkedin.com/company/p%C3%B4le-de-formation-et-%C3%A9volution-professionnelle-de-y-schools/?viewAsMember=true",
+    bgColor: "#121212", 
+    textColor: "#00AEEF"
   },
-
-  // 4. TRICKING (Sport / Interview)
-  // Ambiance : Énergie, urbain, dynamique, underground.
   {
-    id: "interview-tricking",
-    title: "INTERVIEW",
-    client: "Projet Documentaire",
-    role: "Réalisation & Éclairage",
-    date: "2023",
-    descFr:
-      "Réalisation d'une vidéo immersive pour capturer l'énergie du Tricking, un sport spectaculaire mêlant arts martiaux et acrobaties.",
-    descEn:
-      "Direction of an immersive video capturing the high energy of Tricking, a spectacular sport blending martial arts and acrobatics.",
-    image: "/interview.jpg",
-    bgColor: "#18181B", // Gris asphalte / Béton (Zinc 900)
-    textColor: "#BEF264", // Vert citron / Néon (Lime 300 - très sport extrême)
+    id: "ppm-social-media",
+    title: "SOCIAL MEDIA",
+    client: "Phnom Penh Market",
+    role: "Social Media Manager",
+    date: "2024 - Aujourd'hui",
+    descFr: "Gestion quotidienne des réseaux sociaux : création de contenus réactifs, service client et stratégie de fidélisation.",
+    descEn: "Daily social media management: reactive content creation, customer service, and loyalty strategy.",
+    image: "/ppm-facebook.jpg",
+    link: "https://www.facebook.com/phnompenhmarket.fr",
+    bgColor: "#0a0a0a",
+    textColor: "#0866FF"
   },
-
-  // 5. MMI YOUTUBE (Création Vidéo)
-  // Ambiance : YouTube, viralité, interface vidéo.
+  {
+    id: "ppm-nouvel-an",
+    title: "NOUVEL AN",
+    client: "Phnom Penh Market",
+    role: "Organisateur & Communication",
+    date: "2024",
+    descFr: "Organisation d'une danse du lion traditionnelle : gestion logistique, création visuelle et stratégie locale.",
+    descEn: "Organization of a traditional lion dance: logistics, visual creation, and local strategy.",
+    image: "/danse-lion4.jpg",
+    link: "https://www.instagram.com/p/DFkaOYwCIXF/",
+    bgColor: "#0f0f0f",
+    textColor: "#FFD700"
+  },
+  {
+    id: "tricking-interview",
+    title: "INTERVIEW",
+    client: "Projet Audiovisuel",
+    role: "Storyboarder & Éclairagiste",
+    date: "2024",
+    descFr: "Réalisation d'une interview immersive capturant l'énergie du tricking via une mise en lumière dynamique.",
+    descEn: "Creation of an immersive interview capturing the energy of tricking through dynamic lighting.",
+    image: "/interview.jpg",
+    link: "https://www.youtube.com/watch?v=CW6vQIM7olk&source_ve_path=MTc4NDI0",
+    bgColor: "#111111",
+    textColor: "#E67E22"
+  },
+  {
+    id: "brochure-foret-orient",
+    title: "FORÊT D'ORIENT",
+    client: "Parc Naturel Régional",
+    role: "UX Design & Conception",
+    date: "2024",
+    descFr: "Refonte de la brochure officielle : simplification de l'information, création d'infographies et optimisation du parcours visiteur.",
+    descEn: "Redesign of the official brochure: information simplification, infographic creation, and visitor journey optimization.",
+    image: "/foret-orient.jpg",
+    link: "/brochure.pdf",
+    bgColor: "#0a0c0a", 
+    textColor: "#2ECC71"
+  },
   {
     id: "mmi-youtube",
-    title: "CODE MMI",
-    client: "Exercice de style",
+    title: "VIDEO YOUTUBE",
+    client: "Projet Étudiant",
     role: "Création Audiovisuelle",
-    date: "2023",
-    descFr:
-      "Présentation de la formation MMI en adoptant les codes dynamiques et viraux des créateurs de contenu web (style YouTubeur).",
-    descEn:
-      "Presentation of the MMI program adopting the dynamic and viral communication codes of web content creators (YouTuber style).",
+    date: "2025",
+    descFr: "Présentation de la formation MMI en adoptant les codes dynamiques et viraux des créateurs de contenu web.",
+    descEn: "Presentation of the MMI program adopting the dynamic and viral communication codes of web content creators.",
     image: "/mmiyoutube.jpg",
-    bgColor: "#1a1f29", // Gris très clair (Interface UI claire)
-    textColor: "#DC2626", // Rouge vif (Le rouge iconique de YouTube)
+    link: "https://www.youtube.com/watch?v=Shw7WDWJBbI&source_ve_path=MTc4NDI0",
+    bgColor: "#1a1f29",
+    textColor: "#FF0000"
   },
-
-  // 6. PODCAST PARODIQUE
-  // Ambiance : Audio, néon, Apple Podcasts, ondes sonores.
   {
-    id: "podcast-parodie",
-    title: "PODCAST",
-    client: "Projet Fictif",
-    role: "Création Sonore",
-    date: "2023",
-    descFr:
-      "Création d'un podcast parodique utilisant l'humour pour questionner l'influence du marketing automobile, en détournant les codes de marques prestigieuses.",
-    descEn:
-      "Creation of a parody podcast using humor to question the influence of automotive marketing by subverting prestigious brand codes.",
-    image: "/apple-podcasts.jpg",
-    bgColor: "#3B0764", // Violet très sombre (Rappelle l'icône Apple Podcast)
-    textColor: "#E9D5FF", // Lilas clair (Contraste doux et électrique)
-  },
-
-  // 7. PPM RÉSEAUX (Instagram)
-  // Ambiance : Food, convivialité, story Instagram.
-  {
-    id: "ppm-social",
-    title: "PPM RÉSEAUX",
-    client: "Phnom Penh Market",
-    role: "Community Management",
-    date: "Depuis Fév. 2024",
-    descFr:
-      "Développement de la présence numérique de l'épicerie familiale. Création de contenu quotidien (posts, storys) pour fidéliser la clientèle locale.",
-    descEn:
-      "Development of the family grocery store's digital presence. Daily content creation (posts, stories) to build local customer loyalty.",
-    image: "/instappp.jpg",
-    bgColor: "#EA580C", // Orange chaud / Epicé
-    textColor: "#FFFBEB", // Blanc chaud / Coquille d'oeuf
-  },
-
-  // 8. LYCÉE CROGNY (Brochure Forêt)
-  // Ambiance : Nature, bois, sécurité forestière.
-  {
-    id: "brochure-crogny",
-    title: "LYCÉE CROGNY",
-    client: "Lycée Forestier",
-    role: "Design Éditorial",
-    date: "2023",
-    descFr:
-      "Création graphique d'une brochure informative sur l'entretien des outils et la sécurité en forêt. Mise en page, hiérarchisation et infographies.",
-    descEn:
-      "Graphic design of an informative brochure on tool maintenance and forest safety. Layout design, information hierarchy, and infographics.",
-    image: "/brochure-exterieur.jpg",
-    bgColor: "#1B4332", // Vert forêt très profond
-    textColor: "#FEF3C7", // Jaune pâle / Couleur bois clair
-  },
+    id: "cinema-utopia",
+    title: "UTOPIA",
+    client: "Cinéma d'Art et d'Essai",
+    role: "Identité Visuelle & Design",
+    date: "2024",
+    descFr: "Refonte complète de l'identité visuelle : création de logo, typographie et iconographie pour une image moderne et engagée.",
+    descEn: "Complete visual identity redesign: logo creation, typography, and iconography for a modern and committed brand image.",
+    image: "/utopia-troyes.jpg",
+    link: "/charte-graphique.pdf",
+    bgColor: "#0d0d0d", 
+    textColor: "#D4A373"
+  }
 ];

@@ -14,24 +14,27 @@ export default function Projects() {
   const { lang } = useLanguage();
 
   const projects = [
-{
-  title: lang === "fr" ? "ÉVÉNEMENTIEL & COMMUNICATION" : "EVENTS & COMMUNICATION",
-  role: lang === "fr" ? "Organisateur & Chargé de communication" : "Event Planner & Communication Manager",
-  desc: lang === "fr" ? "Organisation de la danse du lion pour le Nouvel An Chinois : coordination logistique, création graphique et captation vidéo." : "Organization of the Chinese New Year lion dance: logistics, graphic design, and video production.",
-  image: "/danse-lion4.jpg",
-},
-{
-  title: lang === "fr" ? "COMMUNICATION GLOBALE" : "GLOBAL COMMUNICATION",
-  role: lang === "fr" ? "Chargé de communication" : "Communication Officer",
-  desc: lang === "fr" ? "Déploiement de la stratégie digitale, événementielle et print : création de contenus, gestion CRM et optimisation SEO." : "Deployment of digital, event, and print strategies: content creation, CRM management, and SEO optimization.",
-  image: "/yschools.jpg",
-},
-{
-  title: lang === "fr" ? "AUDIOVISUEL & RÉALISATION" : "AUDIOVISUAL & FILMMAKING",
-  role: lang === "fr" ? "Storyboarder & Chef éclairagiste" : "Storyboarder & Gaffer",
-  desc: lang === "fr" ? "Réalisation d'une interview immersive sur le Tricking : conception visuelle, mise en lumière et coordination technique." : "Creation of an immersive Tricking interview: visual design, lighting, and technical coordination.",
-  image: "/interview.jpg",
-},
+    {
+      id: "ppm-nouvel-an",
+      title: lang === "fr" ? "ÉVÉNEMENTIEL & COMMUNICATION" : "EVENTS & COMMUNICATION",
+      role: lang === "fr" ? "Organisateur & Chargé de communication" : "Event Planner & Communication Manager",
+      desc: lang === "fr" ? "Organisation de la danse du lion pour le Nouvel An Chinois : coordination logistique, création graphique et captation vidéo." : "Organization of the Chinese New Year lion dance: logistics, graphic design, and video production.",
+      image: "/danse-lion4.jpg",
+    },
+    {
+      id: "yschools-comm",
+      title: lang === "fr" ? "COMMUNICATION GLOBALE" : "GLOBAL COMMUNICATION",
+      role: lang === "fr" ? "Chargé de communication" : "Communication Officer",
+      desc: lang === "fr" ? "Déploiement de la stratégie digitale, événementielle et print : création de contenus, gestion CRM et optimisation SEO." : "Deployment of digital, event, and print strategies: content creation, CRM management, and SEO optimization.",
+      image: "/yschools.jpg",
+    },
+    {
+      id: "tricking-interview",
+      title: lang === "fr" ? "AUDIOVISUEL & RÉALISATION" : "AUDIOVISUAL & FILMMAKING",
+      role: lang === "fr" ? "Storyboarder & Chef éclairagiste" : "Storyboarder & Gaffer",
+      desc: lang === "fr" ? "Réalisation d'une interview immersive sur le Tricking : conception visuelle, mise en lumière et coordination technique." : "Creation of an immersive Tricking interview: visual design, lighting, and technical coordination.",
+      image: "/interview.jpg",
+    },
   ];
 
   useGSAP(
@@ -47,7 +50,6 @@ export default function Projects() {
         scrollTrigger: { trigger: container.current, start: "top 75%" },
       });
 
-      // On garde toutes tes animations de parallaxe, même sur mobile
       gsap.utils.toArray(".parallax-fast").forEach((layer) => {
         gsap.to(layer as Element, {
           y: -300,
@@ -74,7 +76,6 @@ export default function Projects() {
       ref={container}
       className="relative py-24 md:py-32 px-6 md:px-24 bg-white text-zinc-900 overflow-hidden"
     >
-      {/* === TOUTES TES COUCHES DE PROFONDEUR SONT CONSERVÉES === */}
       <div className="parallax-slow absolute top-[5%] right-[5%] text-zinc-100 z-0">
         <svg width="300" height="300" viewBox="0 0 100 100" fill="currentColor" className="blur-xl opacity-50">
           <circle cx="50" cy="50" r="50" />
@@ -102,7 +103,6 @@ export default function Projects() {
       </div>
 
       <div className="relative z-10">
-        {/* Titre : text-4xl sur mobile pour tenir sur une ligne */}
         <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-16 md:mb-20 text-center uppercase">
           {lang === "fr" ? "Projets Phares" : "Featured Projects"}
         </h2>
@@ -121,14 +121,13 @@ export default function Projects() {
                   className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover/card:bg-black/10 z-10"></div>
+                <div className="absolute inset-0 bg-black/10 z-10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
               </div>
 
               <div className="w-full md:w-1/2 space-y-4 md:space-y-5 px-2 md:px-0">
                 <p className="text-[#ea743f] font-bold tracking-widest text-xs md:text-sm uppercase">
                   {proj.role}
                 </p>
-                {/* h3 : text-4xl sur mobile pour éviter les retours à la ligne brusques */}
                 <h3 className="text-4xl md:text-5xl font-bold tracking-tighter">
                   {proj.title}
                 </h3>
@@ -138,7 +137,7 @@ export default function Projects() {
 
                 <div className="pt-2">
                   <Link
-                    href="/projets"
+                    href={`/projets/${proj.id}`}
                     className="group/btn inline-flex items-center gap-3 mt-2 md:mt-4 px-6 py-3 border border-zinc-300 text-zinc-700 rounded-full font-medium transition-all duration-300 hover:bg-[#ea743f] hover:border-[#ea743f] hover:text-white cursor-pointer"
                   >
                     <span className="text-sm md:text-base">{lang === "fr" ? "Voir les détails" : "View details"}</span>
