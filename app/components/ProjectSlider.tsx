@@ -2,14 +2,11 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 
-export default function ProjectSlider({
-  projects,
-  activeIndex,
-  setActiveIndex,
-  isExploring,
-}: any) {
+export default function ProjectSlider({ projects, activeIndex, setActiveIndex, isExploring }: any) {
   const [isMobile, setIsMobile] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0); // Pour le mouvement en direct
   const startX = useRef(0);
+  const isDragging = useRef(false);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -19,53 +16,72 @@ export default function ProjectSlider({
   }, []);
 
   const handleStart = (e: any) => {
-    startX.current = e.clientX || (e.touches && e.touches[0].clientX);
+    isDragging.current = true;
+    startX.current = e.touches ? e.touches[0].clientX : e.clientX;
   };
 
-  const handleEnd = (e: any) => {
-    const endX = e.clientX || (e.changedTouches && e.changedTouches[0].clientX);
-    const diff = startX.current - endX;
-    if (isExploring || Math.abs(diff) < 50) return;
-    if (diff > 0 && activeIndex < projects.length - 1) setActiveIndex(activeIndex + 1);
-    else if (diff < 0 && activeIndex > 0) setActiveIndex(activeIndex - 1);
+  const handleMove = (e: any) => {
+    if (!isDragging.current || isExploring) return;
+    const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+    const diff = currentX - startX.current;
+    
+    // On divise par 10 pour que le mouvement soit proportionnel à l'écran (en vw)
+    setDragOffset(diff / 10); 
   };
 
-  // MODIFICATION ICI : On cache le slider pour PC ET Mobile quand on explore
-  // car l'image est maintenant gérée par ProjectUI uniquement
+  const handleEnd = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+
+    // Si on a glissé de plus de 5 unités (environ 50px)
+    if (dragOffset < -5 && activeIndex < projects.length - 1) {
+      setActiveIndex(activeIndex + 1);
+    } else if (dragOffset > 5 && activeIndex > 0) {
+      setActiveIndex(activeIndex - 1);
+    }
+
+    setDragOffset(0); // On remet à zéro pour l'animation finale
+  };
+
   if (isExploring) return null;
 
   return (
     <div
-      className="absolute inset-0 h-full w-full overflow-hidden flex items-center justify-center z-10 select-none"
+      className="absolute inset-0 h-full w-full overflow-hidden flex items-center justify-center z-10 touch-none select-none"
       onMouseDown={handleStart}
+      onMouseMove={handleMove}
       onMouseUp={handleEnd}
+      onMouseLeave={handleEnd}
       onTouchStart={handleStart}
+      onTouchMove={handleMove}
       onTouchEnd={handleEnd}
     >
       {projects.map((proj: any, index: number) => {
         const offset = index - activeIndex;
         const isActive = offset === 0;
         
-        // Espacement réduit comme demandé (75 -> 70 et 45 -> 40)
-        const translateX = isMobile ? offset * 70 : offset * 40;
+        // On ajoute le dragOffset au calcul du déplacement
+        const baseTranslate = isMobile ? offset * 70 : offset * 40;
+        const finalTranslate = baseTranslate + dragOffset;
+        
         const opacity = Math.abs(offset) > 1 ? 0 : isActive ? 1 : 0.4;
 
         return (
           <div
             key={proj.id}
-            className="transition-all duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)] shadow-2xl absolute"
+            className={`absolute shadow-2xl ${!isDragging.current ? "transition-all duration-700 ease-out" : ""}`}
             style={{
               width: isMobile ? "80vw" : "40vw",
               height: isMobile ? "30vh" : "40vh",
               top: "50%",
               left: "50%",
-              transform: `translate(calc(-50% + ${translateX}vw), -50%) scale(${isActive ? 1 : 0.8})`,
+              transform: `translate(calc(-50% + ${finalTranslate}vw), -50%) scale(${isActive ? 1 : 0.85})`,
               opacity: opacity,
               zIndex: isActive ? 20 : 10,
-              visibility: opacity === 0 ? "hidden" : "visible"
+              visibility: opacity === 0 ? "hidden" : "visible",
             }}
           >
-            <div className="relative w-full h-full overflow-hidden bg-zinc-900 rounded-sm">
+            <div className="relative w-full h-full overflow-hidden bg-zinc-900 rounded-sm pointer-events-none">
               <Image
                 src={proj.image}
                 alt={proj.title}
