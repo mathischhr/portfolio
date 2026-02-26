@@ -7,12 +7,21 @@ import { useLanguage } from "../context/LanguageContext";
 export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
   const listRef = useRef<(HTMLLIElement | null)[]>([]);
   const { lang, toggleLanguage } = useLanguage();
 
   const isProjectPage = pathname.startsWith("/projets");
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const navLinks = [
     { name: lang === "fr" ? "Accueil" : "Home", path: "/", color: "#ea743f" },
     { name: lang === "fr" ? "Projets" : "Projects", path: "/projets", color: "#3b82f6" },
@@ -36,15 +45,16 @@ export default function Nav() {
     }
   }, [pathname, lang]);
 
+  // --- LOGIQUE : CACHER SUR PROJET MOBILE ---
+  if (isMobile && isProjectPage) return null;
+
   return (
     <header className={`fixed z-[100] transition-all duration-700 flex justify-center w-full ${isScrolled && !isProjectPage ? "top-6 px-4" : "top-0 px-0"}`}>
       
-      {/* Overlay sombre */}
       {isOpen && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-md z-[120] md:hidden" onClick={() => setIsOpen(false)} />
       )}
 
-      {/* TIROIR MOBILE CORRIGÉ */}
       <div className={`
         fixed top-0 right-0 w-[85%] h-full z-[130] md:hidden
         flex flex-col items-center justify-center shadow-2xl
@@ -65,28 +75,19 @@ export default function Nav() {
             </li>
           ))}
         </ul>
-        
-        <button onClick={toggleLanguage} className="mt-20 flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase">
-          <span className={lang === "fr" ? "opacity-100" : "opacity-30"} style={{ color: isProjectPage ? "white" : "black" }}>FR</span>
-          <span className="opacity-20" style={{ color: isProjectPage ? "white" : "black" }}>/</span>
-          <span className={lang === "en" ? "opacity-100" : "opacity-30"} style={{ color: isProjectPage ? "white" : "black" }}>EN</span>
-        </button>
       </div>
 
-      {/* BARRE DE NAV PRINCIPALE */}
       <nav className={`relative flex items-center justify-between transition-all duration-700 z-[140]
           ${isProjectPage ? "w-full bg-transparent px-8 py-6" : isScrolled
           ? "w-full md:w-[70%] rounded-full shadow-lg bg-white/95 backdrop-blur-md border border-zinc-200 px-8 py-3"
           : "w-full bg-white border-b border-zinc-100 px-8 py-6"
         }`}
       >
-        {/* LOGO */}
         <Link href="/" className="font-black text-2xl tracking-tighter transition-colors" 
           style={{ color: isProjectPage ? activeColor : "#18181b" }}>
           MC<span style={{ color: activeColor }}>.</span>
         </Link>
 
-        {/* DESKTOP LINKS */}
         <div className="hidden md:flex items-center gap-12">
           <ul className="relative flex space-x-12 text-[10px] uppercase tracking-[0.2em] font-bold">
             {navLinks.map((link, index) => (
@@ -101,7 +102,6 @@ export default function Nav() {
               style={{ left: indicatorStyle.left, width: indicatorStyle.width, backgroundColor: activeColor, opacity: indicatorStyle.opacity }}
             />
           </ul>
-          
           <button onClick={toggleLanguage} className="flex items-center gap-1 text-[10px] font-bold tracking-widest"
             style={{ color: isProjectPage ? activeColor : "#18181b" }}>
             <span className={lang === "fr" ? "opacity-100" : "opacity-30"}>FR</span>
@@ -109,7 +109,6 @@ export default function Nav() {
           </button>
         </div>
 
-        {/* BURGER / CROIX (MOBILE) */}
         <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 flex flex-col items-end gap-1.5 transition-colors"
           style={{ color: isProjectPage || (isOpen && isProjectPage) ? activeColor : "#18181b" }}>
           <div className={`h-0.5 bg-current transition-all duration-300 ${isOpen ? "w-6 rotate-45 translate-y-2" : "w-6"}`} />

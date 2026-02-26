@@ -6,6 +6,8 @@ interface Project {
   id: string | number;
   image: string;
   title: string;
+  textColor: string;
+  [key: string]: any;
 }
 
 interface ProjectSliderProps {
@@ -13,6 +15,7 @@ interface ProjectSliderProps {
   activeIndex: number;
   setActiveIndex: (index: number) => void;
   isExploring: boolean;
+  setIsExploring: (val: boolean) => void;
 }
 
 export default function ProjectSlider({
@@ -20,108 +23,120 @@ export default function ProjectSlider({
   activeIndex,
   setActiveIndex,
   isExploring,
+  setIsExploring,
 }: ProjectSliderProps) {
   const [isMobile, setIsMobile] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0); 
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
   const startX = useRef<number>(0);
   const isDragging = useRef<boolean>(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      setWindowWidth(window.innerWidth);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Début du toucher / clic
-  const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
-    if (isExploring) return;
+  useEffect(() => {
+    if (!isMobile || isExploring || !scrollContainerRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveIndex(Number(entry.target.getAttribute("data-index")));
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+    const cards = scrollContainerRef.current.querySelectorAll(".project-card");
+    cards.forEach((c) => observer.observe(c));
+    return () => observer.disconnect();
+  }, [isMobile, isExploring, setActiveIndex]);
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (isMobile || isExploring) return;
     isDragging.current = true;
-    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
-    startX.current = clientX;
+    startX.current = e.clientX;
   };
 
-  // Mouvement du doigt / souris
-  const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDragging.current || isExploring) return;
-    
-    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
-    const diff = clientX - startX.current;
-
-    // Calcul de la résistance pour que le mouvement soit fluide (en vw)
-    const moveInVW = (diff / window.innerWidth) * 100;
-    setDragOffset(moveInVW);
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current) return;
+    const currentX = e.clientX;
+    setDragOffset(currentX - startX.current);
   };
 
-  // Fin du toucher / clic
-  const handleEnd = () => {
+  const onMouseUp = () => {
     if (!isDragging.current) return;
     isDragging.current = false;
-
-    // Seuil de déclenchement : si on a glissé de plus de 10vw
-    if (dragOffset < -10 && activeIndex < projects.length - 1) {
+    const threshold = 100;
+    if (dragOffset < -threshold && activeIndex < projects.length - 1) {
       setActiveIndex(activeIndex + 1);
-    } else if (dragOffset > 10 && activeIndex > 0) {
+    } else if (dragOffset > threshold && activeIndex > 0) {
       setActiveIndex(activeIndex - 1);
     }
-
-    setDragOffset(0); // Retour à la position normale
+    setDragOffset(0);
   };
 
-  if (isExploring) return null;
+  if (isExploring && isMobile) return null;
+
+  if (isMobile) {
+    return (
+      <div
+        ref={scrollContainerRef}
+        className="fixed inset-0 w-full h-screen overflow-y-auto bg-black z-30 snap-y snap-mandatory px-6 pt-32 pb-40 no-scrollbar"
+      >
+        {projects.map((proj, idx) => (
+          <div key={proj.id} data-index={idx} className="project-card flex flex-col gap-6 mb-32 snap-center shrink-0">
+            <div className="relative w-full h-[50vh] rounded-2xl overflow-hidden shadow-2xl">
+              <Image src={proj.image} alt={proj.title} fill className="object-cover" sizes="95vw" priority={idx === 0} />
+            </div>
+            <div className="flex flex-col gap-4 px-2">
+              <h2 className="font-black uppercase tracking-tighter text-4xl leading-none" style={{ color: proj.textColor }}>{proj.title}</h2>
+              <button onClick={() => setIsExploring(true)} className="w-fit font-bold uppercase text-[12px] tracking-widest border-b-2 pb-1" style={{ color: proj.textColor, borderColor: proj.textColor }}>Explore +</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div
-      className="absolute inset-0 h-full w-full overflow-hidden flex items-center justify-center z-10 touch-none select-none"
-      onMouseDown={handleStart}
-      onMouseMove={handleMove}
-      onMouseUp={handleEnd}
-      onMouseLeave={handleEnd}
-      onTouchStart={handleStart}
-      onTouchMove={handleMove}
-      onTouchEnd={handleEnd}
+      className={`absolute inset-0 h-full w-full flex items-center justify-center z-10 select-none cursor-grab active:cursor-grabbing transition-opacity duration-1000 ${
+        isExploring ? "opacity-0 pointer-events-none" : "opacity-100"
+      }`}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+      onMouseLeave={onMouseUp}
     >
       {projects.map((proj, index) => {
         const offset = index - activeIndex;
-        const isActive = offset === 0;
-        
-        // Position de base + ce que le doigt déplace
-        const baseTranslate = isMobile ? offset * 75 : offset * 45;
-        const finalTranslate = baseTranslate + dragOffset;
-        
-        // On cache ce qui est trop loin
-        const opacity = Math.abs(offset) > 1 ? 0 : isActive ? 1 : 0.4;
-
+        const xPos = offset * (windowWidth * 0.4) + dragOffset;
+        if (Math.abs(offset) > 2) return null;
         return (
           <div
             key={proj.id}
-            className={`absolute shadow-2xl transition-transform ${
-              !isDragging.current ? "duration-[800ms] ease-[cubic-bezier(0.23,1,0.32,1)]" : "duration-0"
-            }`}
+            className="absolute shadow-2xl rounded-xl bg-zinc-900 overflow-hidden"
             style={{
-              width: isMobile ? "85vw" : "40vw",
-              height: isMobile ? "35vh" : "45vh",
-              top: "50%",
+              width: "35vw",
+              height: "48vh",
               left: "50%",
-              // On utilise finalTranslate pour que l'image bouge avec le doigt
-              transform: `translate(calc(-50% + ${finalTranslate}vw), -50%) scale(${isActive ? 1 : 0.85})`,
-              opacity: opacity,
-              zIndex: isActive ? 20 : 10,
-              visibility: opacity === 0 ? "hidden" : "visible",
-              pointerEvents: "none", // Empêche l'image de bloquer le swipe du parent
+              top: "50%",
+              transition: isDragging.current ? "none" : "transform 1s cubic-bezier(0.23, 1, 0.32, 1), opacity 1s",
+              transform: `translate(calc(-50% + ${xPos}px), -50%) scale(${offset === 0 ? 1 : 0.8})`,
+              opacity: offset === 0 ? 1 : 0.2,
+              zIndex: offset === 0 ? 20 : 10,
+              pointerEvents: "none",
             }}
           >
-            <div className="relative w-full h-full overflow-hidden bg-zinc-900 rounded-lg">
-              <Image
-                src={proj.image}
-                alt={proj.title}
-                fill
-                className="object-cover"
-                priority={isActive}
-                sizes="(max-width: 768px) 85vw, 40vw"
-                draggable={false}
-              />
-            </div>
+            <Image src={proj.image} alt={proj.title} fill className="object-cover" draggable={false} />
           </div>
         );
       })}

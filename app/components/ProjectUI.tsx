@@ -1,29 +1,15 @@
 "use client";
-
 import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 
-interface ProjectUIProps {
-  project: any;
-  projects: any[];
-  activeIndex: number;
-  setActiveIndex: (index: number) => void;
-  lang: string;
-  isExploring: boolean;
-  setIsExploring: (val: boolean) => void;
-}
-
 export default function ProjectUI({
   project,
-  projects,
-  activeIndex,
-  setActiveIndex,
   lang,
   isExploring,
   setIsExploring,
-}: ProjectUIProps) {
+}: any) {
   const container = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -34,187 +20,166 @@ export default function ProjectUI({
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  useGSAP(
-    () => {
-      if (!container.current || !project) return;
-      const chars = container.current.querySelectorAll(".char");
-      gsap.fromTo(
-        chars,
-        { y: "110%" },
-        { y: "0%", duration: 1.2, stagger: 0.02, ease: "power4.out" }
-      );
-    },
-    { scope: container, dependencies: [project?.id, isExploring] }
-  );
+  const handleBack = () => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    setIsExploring(false);
+  };
+
+  useGSAP(() => {
+    if (!container.current || !project || isMobile) return;
+    const chars = container.current.querySelectorAll(".char");
+    gsap.fromTo(chars, { y: "110%" }, { y: "0%", duration: 1.2, stagger: 0.02, ease: "power4.out", overwrite: true });
+  }, { scope: container, dependencies: [project?.id, isExploring, isMobile] });
 
   if (!project) return null;
+  if (isMobile && !isExploring) return null;
 
   return (
-    <div
-      ref={container}
-      className={`z-40 w-full ${
-        isMobile
-          ? isExploring ? "relative" : "fixed inset-0 overflow-hidden pointer-events-auto"
-          : "absolute inset-0 pointer-events-none"
-      }`}
-    >
-      {/* ================= BOUTON RETOUR (PC SEULEMENT) ================= */}
-      {!isMobile && (
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 z-[999] pointer-events-auto">
-          <button
-            onClick={() => setIsExploring(false)}
-            className={`flex flex-col items-center cursor-pointer group transition-all duration-700 ${
-              isExploring ? "opacity-100 scale-100" : "opacity-0 -translate-y-10 pointer-events-none"
-            }`}
-            style={{ color: project.textColor }}
-          >
-            <span className="text-4xl leading-none transition-transform duration-500 group-hover:rotate-90">×</span>
-            <div className="w-[1px] h-10 bg-current opacity-40 my-2 transition-all duration-500 group-hover:h-14"></div>
-            <span className="font-bold text-[10px] uppercase tracking-widest">{lang === "fr" ? "Retour" : "Back"}</span>
-          </button>
-        </div>
-      )}
-
-      {/* ================= IMAGE PRINCIPALE (PC SEULEMENT) ================= */}
-      {!isMobile && isExploring && (
-        <div 
-          className="absolute right-[12%] top-1/2 -translate-y-1/2 w-[38vw] h-[48vh] overflow-hidden rounded-sm shadow-2xl transition-all duration-1000 ease-[cubic-bezier(0.76,0,0.24,1)] pointer-events-auto"
-        >
-          <Image 
-            src={project.image} 
-            alt={project.title} 
-            fill 
-            className="object-cover"
-            sizes="50vw"
-            priority
-            quality={90}
-          />
-        </div>
-      )}
-
-      {/* ================= CONTENU (TEXTE + INFOS) ================= */}
-      <div
-        className={`flex flex-col transition-all duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${
-          isMobile ? "relative w-full items-center text-center px-6 pt-40 gap-10" : "absolute"
-        }`}
-        style={!isMobile ? {
-          top: "50%",
-          left: isExploring ? "10%" : "50%",
-          transform: isExploring ? "translateY(-50%)" : "translate(-50%, -50%)",
-          width: isExploring ? "35vw" : "100%",
-          alignItems: isExploring ? "flex-start" : "center",
-        } : undefined}
-      >
-        {/* TITRE RÉDUIT */}
-        <h1
-          key={project.id}
-          className="font-black uppercase tracking-tighter leading-[0.85] select-none"
-          style={{
-            color: project.textColor,
-            fontSize: isExploring 
-              ? (isMobile ? "10vw" : "5.5vw") 
-              : (isMobile ? "13vw" : "11vw"),
-          }}
-        >
-          {project.title.split("").map((char: string, i: number) => (
-            <span key={i} className="inline-flex overflow-hidden pb-2">
-              <span className="char inline-block">{char === " " ? "\u00A0" : char}</span>
-            </span>
-          ))}
-        </h1>
-
-        {/* INFOS + DESCRIPTION */}
-        <div
-          className={`flex flex-col gap-8 transition-all duration-700 ${
-            isExploring ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 invisible"
-          }`}
-          style={{ color: project.textColor }}
-        >
-          <p className="text-[11px] font-mono uppercase tracking-wider max-w-sm leading-relaxed opacity-80 mx-auto md:mx-0">
-            {lang === "fr" ? project.descFr : project.descEn}
-          </p>
-
-          <div className="flex flex-wrap gap-6 justify-center md:justify-start">
-            {["date", "client", "role"].map((key) => (
-              <div key={key} className="flex flex-col">
-                <span className="text-[8px] uppercase opacity-50 font-bold tracking-widest">{key}</span>
-                <span className="text-[10px] font-bold uppercase tracking-wider">{project[key]}</span>
-              </div>
-            ))}
+    <div ref={container} className={`z-40 ${isMobile ? "fixed inset-0 overflow-y-auto" : "absolute inset-0 pointer-events-none"}`} 
+         style={isMobile ? { backgroundColor: project.bgColor } : {}}>
+      
+      {/* --- DESIGN MOBILE (NOUVELLE DISPOSITION) --- */}
+      {isMobile && (
+        <div className="relative flex flex-col w-full min-h-full pb-20">
+          
+          {/* 1. Grande Image de couverture en haut */}
+          <div className="relative w-full h-[45vh] shadow-xl">
+            <Image src={project.image} alt={project.title} fill className="object-cover" priority />
+            {/* Bouton Fermer flottant sur l'image */}
+            <button onClick={handleBack} className="absolute top-6 right-6 w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white text-2xl border border-white/20">
+              ×
+            </button>
           </div>
 
-          {/* SECTION MOBILE EXPLORE */}
-          {isMobile && isExploring && (
-            <div className="flex flex-col items-center gap-12 w-full mt-4">
-              <div className="w-full overflow-hidden rounded-md shadow-2xl">
-                <Image src={project.image} alt={project.title} width={800} height={500} className="w-full h-auto object-cover" quality={90} />
+          {/* 2. Contenu texte avec les couleurs du projet */}
+          <div className="px-8 -mt-10 relative z-10 flex flex-col">
+            
+            {/* Titre avec ombre portée légère pour lisibilité si besoin */}
+            <h1 className="font-black uppercase tracking-tighter leading-[0.85]" 
+                style={{ fontSize: "15vw", color: project.textColor }}>
+              {project.title}
+            </h1>
+
+            {/* Barre de séparation dynamique */}
+            <div className="w-16 h-1 mt-6" style={{ backgroundColor: project.textColor }} />
+
+            {/* Description alignée à gauche pour un look plus moderne */}
+            <p className="mt-8 text-[12px] font-bold uppercase tracking-wider leading-relaxed opacity-90" 
+                style={{ color: project.textColor }}>
+              {lang === "fr" ? project.descFr : project.descEn}
+            </p>
+
+            {/* Infos clés en ligne */}
+            <div className="mt-12 grid grid-cols-3 gap-4 border-t border-b py-6" style={{ borderColor: `${project.textColor}33` }}>
+              <div className="flex flex-col">
+                <span className="text-[7px] uppercase font-bold opacity-50 mb-1" style={{ color: project.textColor }}>Date</span>
+                <span className="text-[10px] font-black uppercase" style={{ color: project.textColor }}>{project.date}</span>
               </div>
-
-              <a href={project.link} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center group pointer-events-auto">
-                <span className="text-3xl mb-2 transition-transform group-hover:-translate-y-1">↗</span>
-                <span className="font-bold border-b border-current text-[10px] uppercase tracking-widest">
-                  {lang === "fr" ? "Visiter le projet" : "Visit Project"}
-                </span>
-              </a>
-
-              <div className="w-screen relative left-1/2 -translate-x-1/2 mt-4 pointer-events-auto">
-                <div className="flex flex-row gap-4 overflow-x-auto px-10 no-scrollbar pb-4" style={{ scrollbarWidth: "none" }}>
-                  {projects?.map((proj: any, idx: number) => (
-                    <button
-                      key={proj.id}
-                      onClick={() => {
-                        setActiveIndex(idx);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className={`relative flex-shrink-0 overflow-hidden w-28 h-16 rounded-sm transition-all duration-500 ${
-                        activeIndex === idx ? "ring-2 ring-current ring-offset-4 scale-105" : "opacity-40"
-                      }`}
-                    >
-                      <Image src={proj.image} alt={proj.title} fill className="object-cover" sizes="120px" />
-                    </button>
-                  ))}
-                </div>
+              <div className="flex flex-col">
+                <span className="text-[7px] uppercase font-bold opacity-50 mb-1" style={{ color: project.textColor }}>Client</span>
+                <span className="text-[10px] font-black uppercase" style={{ color: project.textColor }}>{project.client}</span>
               </div>
-
-              <button onClick={() => setIsExploring(false)} className="flex flex-col items-center group pointer-events-auto pb-20">
-                <div className="w-[1px] h-10 bg-current opacity-40 mb-2 transition-all duration-500 group-active:h-14"></div>
-                <span className="text-4xl leading-none transition-transform duration-500 group-active:rotate-90">×</span>
-                <span className="font-bold text-[10px] uppercase mt-2 tracking-widest">{lang === "fr" ? "Retour" : "Back"}</span>
-              </button>
+              <div className="flex flex-col">
+                <span className="text-[7px] uppercase font-bold opacity-50 mb-1" style={{ color: project.textColor }}>Role</span>
+                <span className="text-[10px] font-black uppercase" style={{ color: project.textColor }}>{project.role}</span>
+              </div>
             </div>
-          )}
-        </div>
-      </div>
 
-      {/* ================= BOUTONS FIXES PC (EXPLORE / VISITE) ================= */}
-      {!isMobile && (
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 pointer-events-auto z-[120]" style={{ color: project.textColor }}>
-          {!isExploring ? (
-            <button onClick={() => setIsExploring(true)} className="flex flex-col items-center group">
-              <span className="text-3xl transition-transform duration-500 group-hover:rotate-90">+</span>
-              <div className="w-[1px] h-10 bg-current opacity-40 my-2 transition-all duration-500 group-hover:h-14"></div>
-              <span className="font-bold text-[10px] uppercase tracking-widest">Explore</span>
-            </button>
-          ) : (
-            <a href={project.link} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center group">
-              <span className="text-3xl mb-1 transition-transform group-hover:-translate-y-1">↗</span>
-              <span className="font-bold border-b border-current text-[10px] uppercase tracking-widest">
-                {lang === "fr" ? "Visiter le projet" : "Visit Project"}
-              </span>
+            {/* Bouton Action */}
+            <a href={project.link} target="_blank" 
+               className="mt-12 py-5 flex items-center justify-center rounded-xl text-[11px] font-black uppercase tracking-[0.2em] transition-transform active:scale-95"
+               style={{ backgroundColor: project.textColor, color: project.bgColor }}>
+              {lang === "fr" ? "Visiter le projet" : "Visit Project"} ↗
             </a>
-          )}
+            
+            <button onClick={handleBack} className="mt-8 text-[9px] font-black uppercase tracking-widest opacity-40" style={{ color: project.textColor }}>
+              {lang === "fr" ? "← Retourner aux projets" : "← Back to projects"}
+            </button>
+          </div>
         </div>
       )}
 
-      {/* ================= BOUTON EXPLORE MOBILE (ACCUEIL) ================= */}
-      {isMobile && !isExploring && (
-        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 pointer-events-auto">
-          <button onClick={() => setIsExploring(true)} className="flex flex-col items-center group" style={{ color: project.textColor }}>
-            <span className="text-3xl transition-transform duration-500 group-active:rotate-90">+</span>
-            <div className="w-[1px] h-10 bg-current opacity-40 my-2 transition-all duration-500 group-active:h-14"></div>
-            <span className="font-bold text-[10px] uppercase tracking-widest">Explore</span>
-          </button>
-        </div>
+      {/* --- DESIGN PC (PAS TOUCHE) --- */}
+      {!isMobile && (
+        <>
+          <div className="fixed top-12 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto">
+            <button
+              onClick={handleBack}
+              className={`flex flex-col items-center group transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${
+                isExploring ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-10 scale-90 pointer-events-none"
+              }`}
+              style={{ color: project.textColor }}
+            >
+              <span className="text-4xl leading-none transition-transform duration-500 group-hover:rotate-90">×</span>
+              <div className="w-[1px] h-10 bg-current opacity-30 my-2 transition-all duration-500 group-hover:h-14"></div>
+              <span className="font-bold text-[10px] uppercase tracking-widest">{lang === "fr" ? "Retour" : "Back"}</span>
+            </button>
+          </div>
+
+          {isExploring && (
+            <div className="absolute right-[20%] top-1/2 -translate-y-1/2 w-[35vw] h-[50vh] rounded-sm overflow-hidden pointer-events-auto shadow-2xl transition-all duration-700">
+              <Image src={project.image} alt={project.title} fill className="object-cover" priority />
+            </div>
+          )}
+
+          <div
+            className="absolute transition-all duration-[1100ms] ease-[cubic-bezier(0.76,0,0.24,1)] flex flex-col"
+            style={{
+              top: "50%",
+              left: isExploring ? "8%" : "50%",
+              transform: isExploring ? "translateY(-50%)" : "translate(-50%, -50%)",
+              width: isExploring ? "38vw" : "100%",
+              alignItems: isExploring ? "flex-start" : "center",
+            }}
+          >
+            <h1
+              key={project.id}
+              className="font-black uppercase tracking-tighter leading-[0.9] flex flex-wrap justify-center md:justify-start"
+              style={{ 
+                color: project.textColor, 
+                fontSize: isExploring ? "5.5vw" : "11vw",
+                textAlign: isExploring ? "left" : "center"
+              }}
+            >
+              {project.title.split(" ").map((word: string, i: number) => (
+                <span key={i} className="inline-flex mr-[0.2em] overflow-hidden">
+                  {word.split("").map((char: string, j: number) => (
+                    <span key={j} className="char inline-block">{char}</span>
+                  ))}
+                </span>
+              ))}
+            </h1>
+
+            <div className={`mt-10 flex flex-col gap-8 w-full transition-all duration-700 ${isExploring ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`} style={{ color: project.textColor }}>
+              <p className="text-[11px] font-mono uppercase tracking-widest max-w-sm opacity-80 leading-relaxed">
+                {lang === "fr" ? project.descFr : project.descEn}
+              </p>
+              <div className="flex gap-8">
+                {["date", "client", "role"].map(k => (
+                  <div key={k} className="flex flex-col">
+                    <span className="text-[8px] opacity-50 uppercase font-bold">{k}</span>
+                    <span className="text-[10px] font-bold uppercase">{project[k]}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 pointer-events-auto z-50">
+            {!isExploring ? (
+              <button onClick={() => setIsExploring(true)} className="flex flex-col items-center group" style={{ color: project.textColor }}>
+                <span className="text-3xl transition-transform group-hover:rotate-90 duration-500">+</span>
+                <div className="w-[1px] h-10 bg-current opacity-30 my-2 transition-all duration-500 group-hover:h-14"></div>
+                <span className="font-bold text-[10px] uppercase tracking-widest">Explore</span>
+              </button>
+            ) : (
+              <a href={project.link} target="_blank" className="flex flex-col items-center group" style={{ color: project.textColor }}>
+                <span className="text-2xl mb-1 transition-transform group-hover:-translate-y-1">↗</span>
+                <span className="font-bold border-b border-current text-[10px] uppercase tracking-widest">Visit Project</span>
+              </a>
+            )}
+          </div>
+        </>
       )}
     </div>
   );
