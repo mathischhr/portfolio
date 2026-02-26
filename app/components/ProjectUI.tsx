@@ -26,6 +26,7 @@ export default function ProjectUI({
   };
 
   useGSAP(() => {
+    // Animation PC (Inchangée)
     if (!container.current || !project || isMobile) return;
     const chars = container.current.querySelectorAll(".char");
     gsap.fromTo(chars, { y: "110%" }, { y: "0%", duration: 1.2, stagger: 0.02, ease: "power4.out", overwrite: true });
@@ -34,42 +35,42 @@ export default function ProjectUI({
   if (!project) return null;
   if (isMobile && !isExploring) return null;
 
+  // Code pour forcer la flèche en texte sur iPhone (évite l'emoji)
+  const arrowIcon = "\u2197\uFE0E";
+
   return (
     <div ref={container} className={`z-40 ${isMobile ? "fixed inset-0 overflow-y-auto" : "absolute inset-0 pointer-events-none"}`} 
          style={isMobile ? { backgroundColor: project.bgColor } : {}}>
       
-      {/* --- DESIGN MOBILE (NOUVELLE DISPOSITION) --- */}
+      {/* --- DESIGN MOBILE --- */}
       {isMobile && (
         <div className="relative flex flex-col w-full min-h-full pb-20">
           
-          {/* 1. Grande Image de couverture en haut */}
+          {/* 1. Image de couverture */}
           <div className="relative w-full h-[45vh] shadow-xl">
             <Image src={project.image} alt={project.title} fill className="object-cover" priority />
-            {/* Bouton Fermer flottant sur l'image */}
+            {/* Bouton Fermer flottant */}
             <button onClick={handleBack} className="absolute top-6 right-6 w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white text-2xl border border-white/20">
               ×
             </button>
           </div>
 
-          {/* 2. Contenu texte avec les couleurs du projet */}
+          {/* 2. Contenu texte dynamique */}
           <div className="px-8 -mt-10 relative z-10 flex flex-col">
             
-            {/* Titre avec ombre portée légère pour lisibilité si besoin */}
             <h1 className="font-black uppercase tracking-tighter leading-[0.85]" 
                 style={{ fontSize: "15vw", color: project.textColor }}>
               {project.title}
             </h1>
 
-            {/* Barre de séparation dynamique */}
             <div className="w-16 h-1 mt-6" style={{ backgroundColor: project.textColor }} />
 
-            {/* Description alignée à gauche pour un look plus moderne */}
             <p className="mt-8 text-[12px] font-bold uppercase tracking-wider leading-relaxed opacity-90" 
                 style={{ color: project.textColor }}>
               {lang === "fr" ? project.descFr : project.descEn}
             </p>
 
-            {/* Infos clés en ligne */}
+            {/* Grille d'infos */}
             <div className="mt-12 grid grid-cols-3 gap-4 border-t border-b py-6" style={{ borderColor: `${project.textColor}33` }}>
               <div className="flex flex-col">
                 <span className="text-[7px] uppercase font-bold opacity-50 mb-1" style={{ color: project.textColor }}>Date</span>
@@ -85,14 +86,14 @@ export default function ProjectUI({
               </div>
             </div>
 
-            {/* Bouton Action */}
+            {/* Bouton Action (Flèche corrigée pour iPhone) */}
             <a href={project.link} target="_blank" 
                className="mt-12 py-5 flex items-center justify-center rounded-xl text-[11px] font-black uppercase tracking-[0.2em] transition-transform active:scale-95"
                style={{ backgroundColor: project.textColor, color: project.bgColor }}>
-              {lang === "fr" ? "Visiter le projet" : "Visit Project"} ↗
+              {lang === "fr" ? "Visiter le projet" : "Visit Project"} {arrowIcon}
             </a>
             
-            <button onClick={handleBack} className="mt-8 text-[9px] font-black uppercase tracking-widest opacity-40" style={{ color: project.textColor }}>
+            <button onClick={handleBack} className="mt-8 text-[9px] font-black uppercase tracking-widest opacity-40 text-center" style={{ color: project.textColor }}>
               {lang === "fr" ? "← Retourner aux projets" : "← Back to projects"}
             </button>
           </div>
@@ -174,7 +175,7 @@ export default function ProjectUI({
               </button>
             ) : (
               <a href={project.link} target="_blank" className="flex flex-col items-center group" style={{ color: project.textColor }}>
-                <span className="text-2xl mb-1 transition-transform group-hover:-translate-y-1">↗</span>
+                <span className="text-2xl mb-1 transition-transform group-hover:-translate-y-1">{arrowIcon}</span>
                 <span className="font-bold border-b border-current text-[10px] uppercase tracking-widest">Visit Project</span>
               </a>
             )}
