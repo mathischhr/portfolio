@@ -35,11 +35,18 @@ export default function ProjectSlider({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
 
+  // ANIMATION D'APPARITION : Réduite à 0.4s pour être instantanée
   useGSAP(() => {
     if (!isExploring) {
       gsap.fromTo(sliderRef.current, 
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
+        { opacity: 0, y: 15 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.4, 
+          ease: "power2.out",
+          overwrite: true 
+        }
       );
     }
   }, { dependencies: [isExploring] });
@@ -75,9 +82,9 @@ export default function ProjectSlider({
     if (isMobile) {
       gsap.to(sliderRef.current, {
         opacity: 0,
-        y: -20,
-        duration: 0.5,
-        ease: "power2.inOut",
+        y: -15,
+        duration: 0.3,
+        ease: "power2.in",
         onComplete: () => setIsExploring(true)
       });
     } else {
@@ -109,6 +116,7 @@ export default function ProjectSlider({
     setDragOffset(0);
   };
 
+  // --- MOBILE ---
   if (isMobile) {
     return (
       <div
@@ -142,16 +150,16 @@ export default function ProjectSlider({
     );
   }
 
-  // --- DESIGN PC ---
-  // On masque le slider sur PC en mode explore pour supprimer le doublon
+  // --- PC ---
   if (!isMobile && isExploring) return null;
 
   return (
     <div
       ref={sliderRef}
       style={{ opacity: 0 }}
-      className={`absolute inset-0 h-full w-full flex items-center justify-center z-10 select-none cursor-grab active:cursor-grabbing transition-opacity duration-1000 ${
-        isExploring ? "opacity-0 pointer-events-none" : "opacity-100"
+      /* Suppression des transitions CSS qui ralentissent l'animation GSAP */
+      className={`absolute inset-0 h-full w-full flex items-center justify-center z-10 select-none cursor-grab active:cursor-grabbing ${
+        isExploring ? "pointer-events-none" : ""
       }`}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
@@ -160,8 +168,11 @@ export default function ProjectSlider({
     >
       {projects.map((proj, index) => {
         const offset = index - activeIndex;
+        // Calcul de la position X
         const xPos = offset * (windowWidth * 0.4) + dragOffset;
+        
         if (Math.abs(offset) > 2) return null;
+        
         return (
           <div
             key={proj.id}
@@ -171,14 +182,22 @@ export default function ProjectSlider({
               height: "48vh",
               left: "50%",
               top: "50%",
-              transition: isDragging.current ? "none" : "transform 1s cubic-bezier(0.23, 1, 0.32, 1), opacity 1s",
+              /* On garde une transition rapide pour le mouvement des cartes elles-mêmes */
+              transition: isDragging.current ? "none" : "transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s",
               transform: `translate(calc(-50% + ${xPos}px), -50%) scale(${offset === 0 ? 1 : 0.8})`,
               opacity: offset === 0 ? 1 : 0.2,
               zIndex: offset === 0 ? 20 : 10,
               pointerEvents: "none",
             }}
           >
-            <Image src={proj.image} alt={proj.title} fill className="object-cover" draggable={false} />
+            <Image 
+              src={proj.image} 
+              alt={proj.title} 
+              fill 
+              className="object-cover" 
+              draggable={false} 
+              priority={Math.abs(offset) <= 1}
+            />
           </div>
         );
       })}
