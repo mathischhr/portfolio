@@ -76,29 +76,15 @@ export default function Projects() {
       ref={container}
       className="relative py-24 md:py-32 px-6 md:px-24 bg-white text-zinc-900 overflow-hidden"
     >
-      <div className="parallax-slow absolute top-[5%] right-[5%] text-zinc-100 z-0">
+      {/* Décors avec pointer-events-none pour ne pas bloquer les clics */}
+      <div className="parallax-slow absolute top-[5%] right-[5%] text-zinc-100 z-0 pointer-events-none">
         <svg width="300" height="300" viewBox="0 0 100 100" fill="currentColor" className="blur-xl opacity-50">
           <circle cx="50" cy="50" r="50" />
         </svg>
       </div>
-      <div className="parallax-slow absolute top-[60%] left-[-5%] text-[#ea743f] z-0">
+      <div className="parallax-slow absolute top-[60%] left-[-5%] text-[#ea743f] z-0 pointer-events-none">
         <svg width="250" height="250" viewBox="0 0 100 100" fill="currentColor" className="blur-2xl opacity-10">
           <circle cx="50" cy="50" r="50" />
-        </svg>
-      </div>
-      <div className="parallax-fast absolute top-[20%] right-[15%] text-[#bf8b4d] z-0 opacity-20 pointer-events-none">
-        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 2v20M2 12h20" />
-        </svg>
-      </div>
-      <div className="parallax-fast absolute bottom-[30%] left-[10%] text-zinc-300 z-0 opacity-40 pointer-events-none">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-        </svg>
-      </div>
-      <div className="parallax-fast absolute top-[70%] right-[5%] text-[#ea743f] z-0 opacity-20 pointer-events-none">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="4 14 10 14 10 20 20 10 14 10 14 4 4 14" />
         </svg>
       </div>
 
@@ -136,8 +122,9 @@ export default function Projects() {
                 </p>
 
                 <div className="pt-2">
+                  {/* MODIFICATION ICI : href="/projets" au lieu de href={`/projets/${proj.id}`} */}
                   <Link
-                    href={`/projets/${proj.id}`}
+                    href="/projets"
                     className="group/btn inline-flex items-center gap-3 mt-2 md:mt-4 px-6 py-3 border border-zinc-300 text-zinc-700 rounded-full font-medium transition-all duration-300 hover:bg-[#ea743f] hover:border-[#ea743f] hover:text-white cursor-pointer"
                   >
                     <span className="text-sm md:text-base">{lang === "fr" ? "Voir les détails" : "View details"}</span>

@@ -8,8 +8,8 @@ import { LanguageProvider } from "./context/LanguageContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mathis Chhour | Portfolio",
-  description: "Portfolio de Mathis Chhour - Communication & Design Digital",
+  title: "Mathis CHHOUR | Portfolio",
+  description: "Portfolio de Mathis CHHOUR - Communication & Design Digital",
 };
 
 export default function RootLayout({

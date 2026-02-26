@@ -2,7 +2,7 @@ export const projectsData = [
   {
     id: "yschools-comm",
     title: "Y SCHOOLS",
-    client: "Alternance / Stage",
+    client: "Alternance",
     role: "Chargé de Communication",
     date: "2025 - Aujourd'hui",
     descFr: "Déploiement d’une stratégie globale : création de contenus print/digital, gestion des réseaux sociaux, SEO et pilotage CRM.",
@@ -59,7 +59,7 @@ export const projectsData = [
     date: "2026",
     descFr: "Refonte de la brochure officielle : simplification de l'information, création d'infographies et optimisation du parcours visiteur.",
     descEn: "Redesign of the official brochure: information simplification, infographic creation, and visitor journey optimization.",
-    image: "/foret-orient.jpg",
+    image: "/foret.jpg",
     link: "/brochure.pdf",
     bgColor: "#0a0c0a", 
     textColor: "#2ECC71"
@@ -80,7 +80,7 @@ export const projectsData = [
   {
     id: "cinema-utopia",
     title: "UTOPIA",
-    client: "Cinéma d'Art et d'Essai",
+    client: "Projet Etudiant",
     role: "Identité Visuelle & Design",
     date: "2024",
     descFr: "Refonte complète de l'identité visuelle : création de logo, typographie et iconographie pour une image moderne et engagée.",
