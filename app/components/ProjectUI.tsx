@@ -11,6 +11,7 @@ export default function ProjectUI({
   setIsExploring,
 }: any) {
   const container = useRef<HTMLDivElement>(null);
+  const mobileContent = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -21,35 +22,61 @@ export default function ProjectUI({
   }, []);
 
   const handleBack = () => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-    setIsExploring(false);
+    // Animation de sortie avant de fermer
+    if (isMobile) {
+      gsap.to(container.current, {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.inOut",
+        onComplete: () => {
+          setIsExploring(false);
+          window.scrollTo({ top: 0, behavior: "instant" });
+        }
+      });
+    } else {
+      setIsExploring(false);
+    }
   };
 
   useGSAP(() => {
-    // Animation PC (Inchangée)
-    if (!container.current || !project || isMobile) return;
-    const chars = container.current.querySelectorAll(".char");
-    gsap.fromTo(chars, { y: "110%" }, { y: "0%", duration: 1.2, stagger: 0.02, ease: "power4.out", overwrite: true });
+    if (!project) return;
+
+    if (isMobile && isExploring) {
+      // Animation d'entrée Mobile
+      gsap.fromTo(container.current, 
+        { opacity: 0 }, 
+        { opacity: 1, duration: 0.6, ease: "power2.out" }
+      );
+      gsap.fromTo(mobileContent.current, 
+        { y: 50, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 0.8, delay: 0.2, ease: "power3.out" }
+      );
+    } else if (!isMobile) {
+      // Animation PC originale
+      const chars = container.current?.querySelectorAll(".char");
+      if (chars) {
+        gsap.fromTo(chars, { y: "110%" }, { y: "0%", duration: 1.2, stagger: 0.02, ease: "power4.out", overwrite: true });
+      }
+    }
   }, { scope: container, dependencies: [project?.id, isExploring, isMobile] });
 
   if (!project) return null;
+  // On ne retourne pas null direct, on gère la visibilité via l'opacité pour permettre l'animation
   if (isMobile && !isExploring) return null;
 
-  // Code pour forcer la flèche en texte sur iPhone (évite l'emoji)
   const arrowIcon = "\u2197\uFE0E";
 
   return (
-    <div ref={container} className={`z-40 ${isMobile ? "fixed inset-0 overflow-y-auto" : "absolute inset-0 pointer-events-none"}`} 
-         style={isMobile ? { backgroundColor: project.bgColor } : {}}>
+    <div ref={container} className={`z-[150] ${isMobile ? "fixed inset-0 overflow-y-auto" : "absolute inset-0 pointer-events-none"}`} 
+         style={isMobile ? { backgroundColor: project.bgColor, opacity: 0 } : {}}>
       
       {/* --- DESIGN MOBILE --- */}
       {isMobile && (
-        <div className="relative flex flex-col w-full min-h-full pb-20">
+        <div ref={mobileContent} className="relative flex flex-col w-full min-h-full pb-20">
           
           {/* 1. Image de couverture */}
           <div className="relative w-full h-[45vh] shadow-xl">
             <Image src={project.image} alt={project.title} fill className="object-cover" priority />
-            {/* Bouton Fermer flottant */}
             <button onClick={handleBack} className="absolute top-6 right-6 w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white text-2xl border border-white/20">
               ×
             </button>
@@ -57,7 +84,6 @@ export default function ProjectUI({
 
           {/* 2. Contenu texte dynamique */}
           <div className="px-8 -mt-10 relative z-10 flex flex-col">
-            
             <h1 className="font-black uppercase tracking-tighter leading-[0.85]" 
                 style={{ fontSize: "15vw", color: project.textColor }}>
               {project.title}
@@ -70,25 +96,23 @@ export default function ProjectUI({
               {lang === "fr" ? project.descFr : project.descEn}
             </p>
 
-            {/* Grille d'infos */}
             <div className="mt-12 grid grid-cols-3 gap-4 border-t border-b py-6" style={{ borderColor: `${project.textColor}33` }}>
-              <div className="flex flex-col">
+              <div className="flex flex-col text-left">
                 <span className="text-[7px] uppercase font-bold opacity-50 mb-1" style={{ color: project.textColor }}>Date</span>
                 <span className="text-[10px] font-black uppercase" style={{ color: project.textColor }}>{project.date}</span>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col text-left">
                 <span className="text-[7px] uppercase font-bold opacity-50 mb-1" style={{ color: project.textColor }}>Client</span>
                 <span className="text-[10px] font-black uppercase" style={{ color: project.textColor }}>{project.client}</span>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col text-left">
                 <span className="text-[7px] uppercase font-bold opacity-50 mb-1" style={{ color: project.textColor }}>Role</span>
                 <span className="text-[10px] font-black uppercase" style={{ color: project.textColor }}>{project.role}</span>
               </div>
             </div>
 
-            {/* Bouton Action (Flèche corrigée pour iPhone) */}
             <a href={project.link} target="_blank" 
-               className="mt-12 py-5 flex items-center justify-center rounded-xl text-[11px] font-black uppercase tracking-[0.2em] transition-transform active:scale-95"
+               className="mt-12 py-5 flex items-center justify-center rounded-xl text-[11px] font-black uppercase tracking-[0.2em] transition-transform active:scale-95 shadow-lg"
                style={{ backgroundColor: project.textColor, color: project.bgColor }}>
               {lang === "fr" ? "Visiter le projet" : "Visit Project"} {arrowIcon}
             </a>
@@ -100,7 +124,7 @@ export default function ProjectUI({
         </div>
       )}
 
-      {/* --- DESIGN PC (PAS TOUCHE) --- */}
+      {/* --- DESIGN PC (INCHANGÉ) --- */}
       {!isMobile && (
         <>
           <div className="fixed top-12 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto">

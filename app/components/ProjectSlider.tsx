@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react"; // Importation recommandée pour Next.js
 
 interface Project {
   id: string | number;
@@ -31,6 +33,18 @@ export default function ProjectSlider({
   const startX = useRef<number>(0);
   const isDragging = useRef<boolean>(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  // --- NOUVELLE ANIMATION D'ENTRÉE ---
+  useGSAP(() => {
+    if (!isExploring) {
+      // Toute la page arrive en fondu et monte légèrement
+      gsap.fromTo(sliderRef.current, 
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
+      );
+    }
+  }, { dependencies: [isExploring] });
 
   useEffect(() => {
     const handleResize = () => {
@@ -59,6 +73,20 @@ export default function ProjectSlider({
     return () => observer.disconnect();
   }, [isMobile, isExploring, setActiveIndex]);
 
+  const handleExplore = () => {
+    if (isMobile) {
+      gsap.to(sliderRef.current, {
+        opacity: 0,
+        y: -20,
+        duration: 0.5,
+        ease: "power2.inOut",
+        onComplete: () => setIsExploring(true)
+      });
+    } else {
+      setIsExploring(true);
+    }
+  };
+
   const onMouseDown = (e: React.MouseEvent) => {
     if (isMobile || isExploring) return;
     isDragging.current = true;
@@ -83,31 +111,50 @@ export default function ProjectSlider({
     setDragOffset(0);
   };
 
-  if (isExploring && isMobile) return null;
-
   if (isMobile) {
     return (
       <div
-        ref={scrollContainerRef}
+        ref={sliderRef}
+        style={{ 
+          display: isExploring ? 'none' : 'block',
+          opacity: 0 // Départ invisible pour laisser GSAP animer
+        }}
         className="fixed inset-0 w-full h-screen overflow-y-auto bg-black z-30 snap-y snap-mandatory px-6 pt-32 pb-40 no-scrollbar"
       >
-        {projects.map((proj, idx) => (
-          <div key={proj.id} data-index={idx} className="project-card flex flex-col gap-6 mb-32 snap-center shrink-0">
-            <div className="relative w-full h-[50vh] rounded-2xl overflow-hidden shadow-2xl">
-              <Image src={proj.image} alt={proj.title} fill className="object-cover" sizes="95vw" priority={idx === 0} />
+        <div ref={scrollContainerRef}>
+          {projects.map((proj, idx) => (
+            <div key={proj.id} data-index={idx} className="project-card flex flex-col gap-6 mb-32 snap-center shrink-0">
+              <div className="relative w-full h-[50vh] rounded-2xl overflow-hidden shadow-2xl">
+                <Image 
+                   src={proj.image} 
+                   alt={proj.title} 
+                   fill 
+                   className="object-cover" 
+                   sizes="95vw" 
+                   priority={idx === 0} // Charge l'image 1 direct
+                />
+              </div>
+              <div className="flex flex-col gap-4 px-2">
+                <h2 className="font-black uppercase tracking-tighter text-4xl leading-none" style={{ color: proj.textColor }}>{proj.title}</h2>
+                <button 
+                  onClick={handleExplore} 
+                  className="w-fit font-bold uppercase text-[12px] tracking-widest border-b-2 pb-1" 
+                  style={{ color: proj.textColor, borderColor: proj.textColor }}
+                >
+                  Explore +
+                </button>
+              </div>
             </div>
-            <div className="flex flex-col gap-4 px-2">
-              <h2 className="font-black uppercase tracking-tighter text-4xl leading-none" style={{ color: proj.textColor }}>{proj.title}</h2>
-              <button onClick={() => setIsExploring(true)} className="w-fit font-bold uppercase text-[12px] tracking-widest border-b-2 pb-1" style={{ color: proj.textColor, borderColor: proj.textColor }}>Explore +</button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
   }
 
   return (
     <div
+      ref={sliderRef}
+      style={{ opacity: 0 }} // Départ invisible aussi sur PC
       className={`absolute inset-0 h-full w-full flex items-center justify-center z-10 select-none cursor-grab active:cursor-grabbing transition-opacity duration-1000 ${
         isExploring ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
