@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react"; // Importation recommandée pour Next.js
+import { useGSAP } from "@gsap/react";
 
 interface Project {
   id: string | number;
@@ -35,10 +35,8 @@ export default function ProjectSlider({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  // --- NOUVELLE ANIMATION D'ENTRÉE ---
   useGSAP(() => {
     if (!isExploring) {
-      // Toute la page arrive en fondu et monte légèrement
       gsap.fromTo(sliderRef.current, 
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
@@ -117,7 +115,7 @@ export default function ProjectSlider({
         ref={sliderRef}
         style={{ 
           display: isExploring ? 'none' : 'block',
-          opacity: 0 // Départ invisible pour laisser GSAP animer
+          opacity: 0 
         }}
         className="fixed inset-0 w-full h-screen overflow-y-auto bg-black z-30 snap-y snap-mandatory px-6 pt-32 pb-40 no-scrollbar"
       >
@@ -125,14 +123,7 @@ export default function ProjectSlider({
           {projects.map((proj, idx) => (
             <div key={proj.id} data-index={idx} className="project-card flex flex-col gap-6 mb-32 snap-center shrink-0">
               <div className="relative w-full h-[50vh] rounded-2xl overflow-hidden shadow-2xl">
-                <Image 
-                   src={proj.image} 
-                   alt={proj.title} 
-                   fill 
-                   className="object-cover" 
-                   sizes="95vw" 
-                   priority={idx === 0} // Charge l'image 1 direct
-                />
+                <Image src={proj.image} alt={proj.title} fill className="object-cover" sizes="95vw" priority={idx === 0} />
               </div>
               <div className="flex flex-col gap-4 px-2">
                 <h2 className="font-black uppercase tracking-tighter text-4xl leading-none" style={{ color: proj.textColor }}>{proj.title}</h2>
@@ -151,10 +142,14 @@ export default function ProjectSlider({
     );
   }
 
+  // --- DESIGN PC ---
+  // On masque le slider sur PC en mode explore pour supprimer le doublon
+  if (!isMobile && isExploring) return null;
+
   return (
     <div
       ref={sliderRef}
-      style={{ opacity: 0 }} // Départ invisible aussi sur PC
+      style={{ opacity: 0 }}
       className={`absolute inset-0 h-full w-full flex items-center justify-center z-10 select-none cursor-grab active:cursor-grabbing transition-opacity duration-1000 ${
         isExploring ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}

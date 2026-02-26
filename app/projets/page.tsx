@@ -1,19 +1,28 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { projectsData } from "../data/projectsData";
 import ProjectUI from "../components/ProjectUI";
 import ProjectSlider from "../components/ProjectSlider";
 import Image from "next/image";
-import Link from "next/link";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 export default function ProjectsPage() {
   const { lang } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isExploring, setIsExploring] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const mainRef = useRef(null);
 
   const activeProject = projectsData ? projectsData[activeIndex] : null;
+
+  useGSAP(() => {
+    gsap.fromTo(mainRef.current, 
+      { opacity: 0 }, 
+      { opacity: 1, duration: 1, ease: "power2.out" }
+    );
+  }, { scope: mainRef });
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -25,8 +34,9 @@ export default function ProjectsPage() {
   useEffect(() => {
     if (activeProject) {
       document.documentElement.style.setProperty("--project-color", activeProject.textColor);
+      document.documentElement.setAttribute("data-project-index", (activeIndex + 1).toString());
     }
-  }, [activeProject]);
+  }, [activeProject, activeIndex]);
 
   useEffect(() => {
     let isThrottled = false;
@@ -47,7 +57,11 @@ export default function ProjectsPage() {
   if (!activeProject) return null;
 
   return (
-    <main className={`relative w-screen h-screen transition-colors duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${isExploring ? "overflow-y-auto" : "overflow-hidden"}`} style={{ backgroundColor: activeProject.bgColor }}>
+    <main 
+      ref={mainRef}
+      className={`relative w-screen h-screen transition-colors duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${isExploring ? "overflow-y-auto" : "overflow-hidden"}`} 
+      style={{ backgroundColor: activeProject.bgColor }}
+    >
       
       {/* PAGINATION PC */}
       {!isExploring && !isMobile && (
@@ -60,45 +74,24 @@ export default function ProjectsPage() {
         </div>
       )}
 
-      {/* --- NAV PILULE MOBILE EN HAUT --- */}
-      {!isExploring && isMobile && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-[420px]">
-          <div className="bg-white rounded-full py-3 px-6 flex items-center justify-between shadow-xl border border-black/5">
-            {/* Logo à gauche */}
-            <Link href="/" className="font-black text-lg tracking-tighter text-black">
-              MC<span style={{ color: activeProject.textColor }}>.</span>
-            </Link>
-
-            {/* Pagination au centre */}
-            <div className="flex items-center gap-3">
-               <span className="text-xs font-black text-black">0{activeIndex + 1}</span>
-               <div className="w-6 h-[1.5px] bg-zinc-100 relative overflow-hidden">
-                  <div className="absolute inset-y-0 left-0 transition-all duration-500" style={{ width: `${((activeIndex + 1) / projectsData.length) * 100}%`, backgroundColor: activeProject.textColor }} />
-               </div>
-               <span className="text-[9px] font-bold text-zinc-300">0{projectsData.length}</span>
-            </div>
-
-            {/* Liens à droite */}
-            <div className="flex items-center gap-4">
-              <Link href="/a-propos" className="text-[9px] font-black uppercase tracking-widest text-zinc-400 hover:text-black">
-                {lang === "fr" ? "Moi" : "Me"}
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
       <ProjectUI project={activeProject} lang={lang} isExploring={isExploring} setIsExploring={setIsExploring} />
       <ProjectSlider projects={projectsData} activeIndex={activeIndex} setActiveIndex={setActiveIndex} isExploring={isExploring} setIsExploring={setIsExploring} />
 
-      {/* MINIATURES PC */}
-      <div className={`transition-all duration-[1200ms] z-50 ${isExploring ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"} hidden md:flex md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:flex-col md:p-8`}>
-        <div className="flex flex-col gap-4 overflow-y-auto no-scrollbar" style={{ scrollbarWidth: "none" }}>
-          {projectsData.map((proj, idx) => (
-            <button key={proj.id} onClick={() => setActiveIndex(idx)} className={`relative overflow-hidden cursor-pointer transition-all duration-500 hover:scale-105 w-32 h-20 ${activeIndex === idx ? "border-2" : "opacity-40 hover:opacity-100"}`} style={{ borderColor: activeProject.textColor }}>
-              <Image src={proj.image} alt={proj.title} fill className="object-cover" sizes="150px" />
-            </button>
-          ))}
+      {/* MINIATURES PC - STYLE RACCORCI ET DÉFILANT */}
+      <div className={`fixed right-8 top-1/2 -translate-y-1/2 z-50 transition-all duration-[1000ms] hidden md:flex ${isExploring ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10 pointer-events-none"}`}>
+        <div className="bg-black/20 backdrop-blur-md p-3 rounded-2xl border border-white/10 max-h-[45vh] flex flex-col">
+          <div className="flex flex-col gap-3 overflow-y-auto no-scrollbar py-1 px-1" style={{ scrollbarWidth: "none" }}>
+            {projectsData.map((proj, idx) => (
+              <button 
+                key={proj.id} 
+                onClick={() => setActiveIndex(idx)} 
+                className={`relative overflow-hidden cursor-pointer transition-all duration-500 hover:scale-105 w-24 h-14 shrink-0 rounded-lg ${activeIndex === idx ? "ring-2 ring-offset-2 ring-white" : "opacity-40 hover:opacity-100"}`}
+                style={{ borderColor: activeIndex === idx ? activeProject.textColor : "transparent" }}
+              >
+                <Image src={proj.image} alt={proj.title} fill className="object-cover" sizes="100px" />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </main>

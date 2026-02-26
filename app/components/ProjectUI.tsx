@@ -22,7 +22,6 @@ export default function ProjectUI({
   }, []);
 
   const handleBack = () => {
-    // Animation de sortie avant de fermer
     if (isMobile) {
       gsap.to(container.current, {
         opacity: 0,
@@ -42,7 +41,6 @@ export default function ProjectUI({
     if (!project) return;
 
     if (isMobile && isExploring) {
-      // Animation d'entrée Mobile
       gsap.fromTo(container.current, 
         { opacity: 0 }, 
         { opacity: 1, duration: 0.6, ease: "power2.out" }
@@ -52,7 +50,6 @@ export default function ProjectUI({
         { y: 0, opacity: 1, duration: 0.8, delay: 0.2, ease: "power3.out" }
       );
     } else if (!isMobile) {
-      // Animation PC originale
       const chars = container.current?.querySelectorAll(".char");
       if (chars) {
         gsap.fromTo(chars, { y: "110%" }, { y: "0%", duration: 1.2, stagger: 0.02, ease: "power4.out", overwrite: true });
@@ -61,7 +58,6 @@ export default function ProjectUI({
   }, { scope: container, dependencies: [project?.id, isExploring, isMobile] });
 
   if (!project) return null;
-  // On ne retourne pas null direct, on gère la visibilité via l'opacité pour permettre l'animation
   if (isMobile && !isExploring) return null;
 
   const arrowIcon = "\u2197\uFE0E";
@@ -70,20 +66,15 @@ export default function ProjectUI({
     <div ref={container} className={`z-[150] ${isMobile ? "fixed inset-0 overflow-y-auto" : "absolute inset-0 pointer-events-none"}`} 
          style={isMobile ? { backgroundColor: project.bgColor, opacity: 0 } : {}}>
       
-      {/* --- DESIGN MOBILE --- */}
+      {/* --- DESIGN MOBILE (Titre SOUS l'image) --- */}
       {isMobile && (
         <div ref={mobileContent} className="relative flex flex-col w-full min-h-full pb-20">
           
-          {/* 1. Image de couverture */}
-          <div className="relative w-full h-[45vh] shadow-xl">
+          <div className="relative w-full h-[40vh] shadow-xl">
             <Image src={project.image} alt={project.title} fill className="object-cover" priority />
-            <button onClick={handleBack} className="absolute top-6 right-6 w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white text-2xl border border-white/20">
-              ×
-            </button>
           </div>
 
-          {/* 2. Contenu texte dynamique */}
-          <div className="px-8 -mt-10 relative z-10 flex flex-col">
+          <div className="px-8 mt-10 relative z-10 flex flex-col">
             <h1 className="font-black uppercase tracking-tighter leading-[0.85]" 
                 style={{ fontSize: "15vw", color: project.textColor }}>
               {project.title}
@@ -112,7 +103,7 @@ export default function ProjectUI({
             </div>
 
             <a href={project.link} target="_blank" 
-               className="mt-12 py-5 flex items-center justify-center rounded-xl text-[11px] font-black uppercase tracking-[0.2em] transition-transform active:scale-95 shadow-lg"
+               className="mt-12 py-5 flex items-center justify-center rounded-xl text-[11px] font-black uppercase tracking-[0.2em]"
                style={{ backgroundColor: project.textColor, color: project.bgColor }}>
               {lang === "fr" ? "Visiter le projet" : "Visit Project"} {arrowIcon}
             </a>
@@ -124,7 +115,7 @@ export default function ProjectUI({
         </div>
       )}
 
-      {/* --- DESIGN PC (INCHANGÉ) --- */}
+      {/* --- DESIGN PC (Titre au CENTRE de l'image) --- */}
       {!isMobile && (
         <>
           <div className="fixed top-12 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto">
@@ -148,9 +139,10 @@ export default function ProjectUI({
           )}
 
           <div
-            className="absolute transition-all duration-[1100ms] ease-[cubic-bezier(0.76,0,0.24,1)] flex flex-col"
+            className="absolute transition-all duration-[1100ms] ease-[cubic-bezier(0.76,0,0.24,1)] flex flex-col z-[20]"
             style={{
-              top: "50%",
+              /* RÉGLAGE ICI : 50% en mode explore, 53% pour le descendre sur le slider */
+              top: isExploring ? "50%" : "56%", 
               left: isExploring ? "8%" : "50%",
               transform: isExploring ? "translateY(-50%)" : "translate(-50%, -50%)",
               width: isExploring ? "38vw" : "100%",
