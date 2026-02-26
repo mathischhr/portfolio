@@ -20,7 +20,7 @@ export const projectsData = [
     date: "2024 - Aujourd'hui",
     descFr: "Gestion quotidienne des réseaux sociaux : création de contenus réactifs, service client et stratégie de fidélisation.",
     descEn: "Daily social media management: reactive content creation, customer service, and loyalty strategy.",
-    image: "/ppm-facebook.jpg",
+    image: "/social-media.jpg",
     link: "https://www.facebook.com/phnompenhmarket.fr",
     bgColor: "#0a0a0a",
     textColor: "#0866FF"
@@ -46,7 +46,7 @@ export const projectsData = [
     date: "2024",
     descFr: "Réalisation d'une interview immersive capturant l'énergie du tricking via une mise en lumière dynamique.",
     descEn: "Creation of an immersive interview capturing the energy of tricking through dynamic lighting.",
-    image: "/interview.jpg",
+    image: "/tricking-img.jpg",
     link: "https://www.youtube.com/watch?v=CW6vQIM7olk&source_ve_path=MTc4NDI0",
     bgColor: "#111111",
     textColor: "#E67E22"
@@ -72,7 +72,7 @@ export const projectsData = [
     date: "2025",
     descFr: "Présentation de la formation MMI en adoptant les codes dynamiques et viraux des créateurs de contenu web.",
     descEn: "Presentation of the MMI program adopting the dynamic and viral communication codes of web content creators.",
-    image: "/mmiyoutube.jpg",
+    image: "/youtube.jpg",
     link: "https://www.youtube.com/watch?v=Shw7WDWJBbI&source_ve_path=MTc4NDI0",
     bgColor: "#1a1f29",
     textColor: "#FF0000"
