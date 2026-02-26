@@ -33,7 +33,7 @@ export default function Projects() {
       title: lang === "fr" ? "AUDIOVISUEL & RÉALISATION" : "AUDIOVISUAL & FILMMAKING",
       role: lang === "fr" ? "Storyboarder & Chef éclairagiste" : "Storyboarder & Gaffer",
       desc: lang === "fr" ? "Réalisation d'une interview immersive sur le Tricking : conception visuelle, mise en lumière et coordination technique." : "Creation of an immersive Tricking interview: visual design, lighting, and technical coordination.",
-      image: "/interview.jpg",
+      image: "/tricking-img.jpg",
     },
   ];
 
