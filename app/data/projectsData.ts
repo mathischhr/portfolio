@@ -23,7 +23,7 @@ export const projectsData = [
     image: "/social-media.jpg",
     link: "https://www.facebook.com/phnompenhmarket.fr",
     bgColor: "#0a0a0a",
-    textColor: "#0866FF"
+    textColor: "#e83ceb"
   },
   {
     id: "ppm-nouvel-an",
@@ -62,7 +62,7 @@ export const projectsData = [
     image: "/foret.jpg",
     link: "/brochure.pdf",
     bgColor: "#0a0c0a", 
-    textColor: "#2ECC71"
+    textColor: "#3ee241"
   },
   {
     id: "mmi-youtube",
@@ -88,6 +88,6 @@ export const projectsData = [
     image: "/utopia-troyes.jpg",
     link: "/charte-graphique.pdf",
     bgColor: "#0d0d0d", 
-    textColor: "#D4A373"
+    textColor: "#18f8b5"
   }
 ];

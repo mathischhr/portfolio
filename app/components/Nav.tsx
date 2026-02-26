@@ -74,20 +74,22 @@ export default function Nav() {
             : "w-full bg-white border-b border-zinc-100 px-8 py-6"
           }`}
       >
-        <Link href="/" className="font-black text-2xl tracking-tighter transition-colors" style={{ color: "#18181b" }}>
+        <Link 
+          href="/" 
+          className="font-black text-2xl tracking-tighter transition-colors duration-500" 
+          style={{ color: isProjectPage ? activeColor : "#18181b" }}
+        >
           MC<span style={{ color: activeColor }}>.</span>
         </Link>
 
-        {/* PAGINATION MOBILE DYNAMIQUE AVEC COULEUR */}
+        {/* PAGINATION MOBILE DYNAMIQUE */}
         {isProjectPage && (
           <div className="md:hidden flex items-center gap-2 absolute left-1/2 -translate-x-1/2 pointer-events-none">
-            {/* Numéro actuel avec couleur */}
             <span className="text-[10px] font-black transition-colors duration-500" style={{ color: activeColor }}>
               0{currentIndex}
             </span>
             
             <div className="w-8 h-[2px] bg-zinc-100 relative overflow-hidden rounded-full">
-               {/* Barre de progression avec couleur */}
                <div 
                  className="absolute inset-y-0 left-0 transition-all duration-500 ease-out" 
                  style={{ 
@@ -119,8 +121,14 @@ export default function Nav() {
           </button>
         </div>
 
-        {/* HAMBURGER */}
-        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 flex flex-col items-end gap-1.5 z-[200]" style={{ color: isOpen ? "white" : "#18181b" }}>
+        {/* HAMBURGER : La couleur s'adapte même quand c'est ouvert */}
+        <button 
+          onClick={() => setIsOpen(!isOpen)} 
+          className="md:hidden p-2 flex flex-col items-end gap-1.5 z-[200] transition-colors duration-500" 
+          style={{ 
+            color: isProjectPage ? activeColor : (isOpen ? "white" : "#18181b") 
+          }}
+        >
           <div className={`h-0.5 bg-current transition-all duration-300 ${isOpen ? "w-6 rotate-45 translate-y-2" : "w-6"}`} />
           <div className={`h-0.5 bg-current transition-all duration-300 ${isOpen ? "opacity-0" : "w-4"}`} />
           <div className={`h-0.5 bg-current transition-all duration-300 ${isOpen ? "w-6 -rotate-45 -translate-y-1" : "w-2"}`} />

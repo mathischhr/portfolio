@@ -4,6 +4,21 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
+// Fonction pour assombrir la couleur
+const darkenColor = (hex: string, amount: number) => {
+  let color = hex.replace("#", "");
+  let num = parseInt(color, 16);
+  let r = (num >> 16) - amount;
+  let g = ((num >> 8) & 0x00FF) - amount;
+  let b = (num & 0x0000FF) - amount;
+  return "#" + (
+    0x1000000 +
+    (r < 0 ? 0 : r) * 0x10000 +
+    (g < 0 ? 0 : g) * 0x100 +
+    (b < 0 ? 0 : b)
+  ).toString(16).slice(1);
+};
+
 interface Project {
   id: string | number;
   image: string;
@@ -27,15 +42,20 @@ export default function ProjectSlider({
   isExploring,
   setIsExploring,
 }: ProjectSliderProps) {
-  const [isMobile, setIsMobile] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [windowWidth, setWindowWidth] = useState<number>(0);
+  const [dragOffset, setDragOffset] = useState<number>(0);
   const startX = useRef<number>(0);
   const isDragging = useRef<boolean>(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  // ANIMATION D'APPARITION : Réduite à 0.4s pour être instantanée
+  // --- LA MODIFICATION EST ICI ---
+  // On récupère la couleur du projet et on la fonce de 160 pour le fond
+  const currentBgColor = projects[activeIndex]?.textColor 
+    ? darkenColor(projects[activeIndex].textColor, 160) 
+    : "#000000";
+
   useGSAP(() => {
     if (!isExploring) {
       gsap.fromTo(sliderRef.current, 
@@ -52,7 +72,7 @@ export default function ProjectSlider({
   }, { dependencies: [isExploring] });
 
   useEffect(() => {
-    const handleResize = () => {
+    const handleResize = (): void => {
       setIsMobile(window.innerWidth < 768);
       setWindowWidth(window.innerWidth);
     };
@@ -78,7 +98,7 @@ export default function ProjectSlider({
     return () => observer.disconnect();
   }, [isMobile, isExploring, setActiveIndex]);
 
-  const handleExplore = () => {
+  const handleExplore = (): void => {
     if (isMobile) {
       gsap.to(sliderRef.current, {
         opacity: 0,
@@ -92,19 +112,19 @@ export default function ProjectSlider({
     }
   };
 
-  const onMouseDown = (e: React.MouseEvent) => {
+  const onMouseDown = (e: React.MouseEvent): void => {
     if (isMobile || isExploring) return;
     isDragging.current = true;
     startX.current = e.clientX;
   };
 
-  const onMouseMove = (e: React.MouseEvent) => {
+  const onMouseMove = (e: React.MouseEvent): void => {
     if (!isDragging.current) return;
     const currentX = e.clientX;
     setDragOffset(currentX - startX.current);
   };
 
-  const onMouseUp = () => {
+  const onMouseUp = (): void => {
     if (!isDragging.current) return;
     isDragging.current = false;
     const threshold = 100;
@@ -123,9 +143,11 @@ export default function ProjectSlider({
         ref={sliderRef}
         style={{ 
           display: isExploring ? 'none' : 'block',
-          opacity: 0 
+          opacity: 0,
+          backgroundColor: currentBgColor,
+          transition: "background-color 0.8s ease"
         }}
-        className="fixed inset-0 w-full h-screen overflow-y-auto bg-black z-30 snap-y snap-mandatory px-6 pt-32 pb-40 no-scrollbar"
+        className="fixed inset-0 w-full h-screen overflow-y-auto z-30 snap-y snap-mandatory px-6 pt-32 pb-40 no-scrollbar"
       >
         <div ref={scrollContainerRef}>
           {projects.map((proj, idx) => (
@@ -134,11 +156,10 @@ export default function ProjectSlider({
                 <Image src={proj.image} alt={proj.title} fill className="object-cover" sizes="95vw" priority={idx === 0} />
               </div>
               <div className="flex flex-col gap-4 px-2">
-                <h2 className="font-black uppercase tracking-tighter text-4xl leading-none" style={{ color: proj.textColor }}>{proj.title}</h2>
+                <h2 className="font-black uppercase tracking-tighter text-4xl leading-none text-white">{proj.title}</h2>
                 <button 
                   onClick={handleExplore} 
-                  className="w-fit font-bold uppercase text-[12px] tracking-widest border-b-2 pb-1" 
-                  style={{ color: proj.textColor, borderColor: proj.textColor }}
+                  className="w-fit font-bold uppercase text-[12px] tracking-widest border-b-2 pb-1 text-white border-white"
                 >
                   Explore +
                 </button>
@@ -156,8 +177,11 @@ export default function ProjectSlider({
   return (
     <div
       ref={sliderRef}
-      style={{ opacity: 0 }}
-      /* Suppression des transitions CSS qui ralentissent l'animation GSAP */
+      style={{ 
+        opacity: 0,
+        backgroundColor: currentBgColor,
+        transition: "background-color 0.8s ease"
+      }}
       className={`absolute inset-0 h-full w-full flex items-center justify-center z-10 select-none cursor-grab active:cursor-grabbing ${
         isExploring ? "pointer-events-none" : ""
       }`}
@@ -168,7 +192,6 @@ export default function ProjectSlider({
     >
       {projects.map((proj, index) => {
         const offset = index - activeIndex;
-        // Calcul de la position X
         const xPos = offset * (windowWidth * 0.4) + dragOffset;
         
         if (Math.abs(offset) > 2) return null;
@@ -182,7 +205,6 @@ export default function ProjectSlider({
               height: "48vh",
               left: "50%",
               top: "50%",
-              /* On garde une transition rapide pour le mouvement des cartes elles-mêmes */
               transition: isDragging.current ? "none" : "transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s",
               transform: `translate(calc(-50% + ${xPos}px), -50%) scale(${offset === 0 ? 1 : 0.8})`,
               opacity: offset === 0 ? 1 : 0.2,
