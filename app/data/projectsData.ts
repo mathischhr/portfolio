@@ -9,8 +9,8 @@ export const projectsData = [
     descEn: "Deployment of a global strategy: print/digital content creation, social media management, SEO, and CRM monitoring.",
     image: "/yschools.jpg",
     link: "https://www.linkedin.com/company/p%C3%B4le-de-formation-et-%C3%A9volution-professionnelle-de-y-schools/?viewAsMember=true",
-    bgColor: "#121212", 
-    textColor: "#00AEEF"
+    bgColor: "#1A1A1A", // Gris anthracite très foncé
+    textColor: "#58CCED" // Bleu ciel doux
   },
   {
     id: "ppm-social-media",
@@ -22,8 +22,8 @@ export const projectsData = [
     descEn: "Daily social media management: reactive content creation, customer service, and loyalty strategy.",
     image: "/social-media.jpg",
     link: "https://www.facebook.com/phnompenhmarket.fr",
-    bgColor: "#0a0a0a",
-    textColor: "#e83ceb"
+    bgColor: "#141614", // Noir nuancé de vert
+    textColor: "#7DFF94" // Vert menthe clair (plus lisible que le pur vert)
   },
   {
     id: "ppm-nouvel-an",
@@ -35,8 +35,8 @@ export const projectsData = [
     descEn: "Organization of a traditional lion dance: logistics, visual creation, and local strategy.",
     image: "/danse-lion4.jpg",
     link: "https://www.instagram.com/p/DFkaOYwCIXF/",
-    bgColor: "#0f0f0f",
-    textColor: "#FFD700"
+    bgColor: "#1A1814", // Noir chaud (nuance ambre)
+    textColor: "#FFD25A" // Or doux
   },
   {
     id: "tricking-interview",
@@ -48,8 +48,8 @@ export const projectsData = [
     descEn: "Creation of an immersive interview capturing the energy of tricking through dynamic lighting.",
     image: "/tricking-img.jpg",
     link: "https://www.youtube.com/watch?v=CW6vQIM7olk&source_ve_path=MTc4NDI0",
-    bgColor: "#111111",
-    textColor: "#E67E22"
+    bgColor: "#1B1714", // Noir terreux
+    textColor: "#FFA35B" // Orange pêche/abricot
   },
   {
     id: "brochure-foret-orient",
@@ -61,8 +61,8 @@ export const projectsData = [
     descEn: "Redesign of the official brochure: information simplification, infographic creation, and visitor journey optimization.",
     image: "/foret.jpg",
     link: "/brochure.pdf",
-    bgColor: "#0a0c0a", 
-    textColor: "#3ee241"
+    bgColor: "#141A14", // Vert forêt très sombre
+    textColor: "#A3E635" // Vert lime doux
   },
   {
     id: "mmi-youtube",
@@ -74,8 +74,8 @@ export const projectsData = [
     descEn: "Presentation of the MMI program adopting the dynamic and viral communication codes of web content creators.",
     image: "/youtube.jpg",
     link: "https://www.youtube.com/watch?v=Shw7WDWJBbI&source_ve_path=MTc4NDI0",
-    bgColor: "#1a1f29",
-    textColor: "#FF0000"
+    bgColor: "#1A1616", // Noir teinté de rouge
+    textColor: "#FF6B6B" // Rouge corail (moins agressif que le rouge pur)
   },
   {
     id: "cinema-utopia",
@@ -87,7 +87,7 @@ export const projectsData = [
     descEn: "Complete visual identity redesign: logo creation, typography, and iconography for a modern and committed brand image.",
     image: "/utopia-troyes.jpg",
     link: "/charte-graphique.pdf",
-    bgColor: "#0d0d0d", 
-    textColor: "#18f8b5"
+    bgColor: "#141818", // Noir bleuté
+    textColor: "#4FD1C5" // Turquoise/Teal élégant
   }
 ];
