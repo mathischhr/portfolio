@@ -17,45 +17,45 @@ export default function SkillsHorizontal() {
       cat: lang === "fr" ? "Communication & Stratégie" : "Communication & Strategy",
       desc:
         lang === "fr"
-          ? "Élaboration de stratégies de communication globales, création de contenu et suivi du budget"
-          : "Crafting global communication strategies, managing content creation, and overseeing budget monitoring.",
+          ? "Je conçois des plans de communication complets pour booster la visibilité et gérer l'image de marque."
+          : "I design complete communication plans to boost visibility and manage brand image.",
       items:
         lang === "fr"
-          ? ["Stratégie 360°", "Social Media", "Web & SEO", "Analyse & Reporting"]
-          : ["360° Strategy", "Social Media", "Web & SEO", "Analytics & Reporting"],
+          ? ["Gestion de projet 360°", "Ligne éditoriale", "Référencement (SEO)", "Analyse d'audience"]
+          : ["360° Project Management", "Editorial Policy", "SEO Optimization", "Audience Analysis"],
     },
     {
-      cat: lang === "fr" ? "Design Graphique & UI/UX" : "Graphic & UI/UX Design",
+      cat: lang === "fr" ? "Design & Expérience" : "Design & Experience",
       desc:
         lang === "fr"
-          ? "Conception d'identités visuelles, supports print et interfaces digitales"
-          : "Visual identity design, print materials, and digital interfaces",
+          ? "Je crée des parcours fluides et des visuels qui captent l'attention tout en respectant une identité."
+          : "I create seamless journeys and visuals that grab attention while respecting a brand identity.",
       items: 
         lang === "fr"
-          ? ["Identité Visuelle", "Supports Print", "Web Design", "Design UI/UX"]
-          : ["Visual Identity", "Print Design", "Web Design", "UI/UX Design"],
+          ? ["Parcours utilisateur (UX)", "Interfaces web (UI)", "Mise en page Print", "Charte graphique"]
+          : ["User Journey (UX)", "Web Interfaces (UI)", "Print Layout", "Brand Identity"],
     },
+ {
+  cat: lang === "fr" ? "Développement & Gestion Web" : "Web Development & Management",
+  desc:
+    lang === "fr"
+      ? "Conception de sites vitrines et gestion d'outils marketing pour piloter la relation client."
+      : "Designing showcase websites and managing marketing tools to lead customer relationships.",
+  items: 
+    lang === "fr"
+      ? ["Intégration (HTML/CSS/JS)", "Gestion de CMS (WordPress)", "Pilotage CRM & Data", "Optimisation SEO"]
+      : ["Web Integration", "CMS Management (WordPress)", "CRM & Data Monitoring", "SEO Optimization"],
+},
     {
-      cat: lang === "fr" ? "Développement Web" : "Web Development",
+      cat: lang === "fr" ? "Audiovisuel & Narration" : "Audiovisual & Storytelling",
       desc:
         lang === "fr"
-          ? "Intégration de sites vitrines, gestion de bases de données et déploiement"
-          : "Showcase website integration, database management, and deployment",
-      items: 
-        lang === "fr"
-          ? ["HTML / CSS / JS", "PHP / SQL", "Gestion de CMS (Wordpress)", "Déploiement de service"]
-          : ["HTML / CSS / JS", "PHP / SQL", "CMS Management (WordPress)", "Service Deployment"],
-    },
-    {
-      cat: lang === "fr" ? "Audiovisuel & Photographie" : "Audiovisual & Photography",
-      desc:
-        lang === "fr"
-          ? "Captation, montage vidéo pour les réseaux sociaux et retouche photographique."
-          : "Filming, video editing for social networks, and photo retouching.",
+          ? "Je raconte des histoires à travers l'image, de l'idée originale jusqu'au rendu final."
+          : "I tell stories through images, from the original idea to the final rendering.",
       items:
         lang === "fr"
-          ? ["Captation Vidéo", "Montage & Colorimétrie", "Shooting Photo", "Post-production"]
-          : ["Video Production", "Editing & Color Grading", "Photo Shoots", "Post-production"],
+          ? ["Écriture de script", "Mise en scène", "Direction artistique", "Post-production"]
+          : ["Scriptwriting", "Staging", "Art Direction", "Post-production"],
     },
   ];
 

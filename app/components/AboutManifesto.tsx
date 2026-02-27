@@ -48,46 +48,47 @@ export default function AboutManifesto({ lang }: { lang: "fr" | "en" }) {
             <span className="bio-line inline-block">
               je fusionne vision créative
             </span>{" "}
-            <span className="bio-line inline-block">et outils techniques.</span>{" "}
+            <span className="bio-line inline-block">et maîtrise technique.</span>{" "}
             
-            {/* Espaceur pour le saut de ligne sur mobile et desktop */}
             <span className="w-full h-6 md:h-12"></span>
 
             <span className="bio-line inline-block">
-              Mon but est de valoriser
+              Mon but : propulser votre
+            </span>{" "}
+            <span className="bio-line inline-block text-[#8ea522]">
+              visibilité en ligne
             </span>{" "}
             <span className="bio-line inline-block">
-              l'image de marque
+              et garantir l'impact
             </span>{" "}
             <span className="bio-line inline-block">
-              et de maximiser
-            </span>{" "}
-            <span className="bio-line inline-block">
-              l'impact de vos messages.
+              de chacun de vos messages.
             </span>
           </div>
         ) : (
           <div className="flex flex-wrap gap-x-[1.5vw]">
             <span className="bio-line inline-block">
-              Specialist in strategy and
+              Digital strategy and
             </span>{" "}
             <span className="bio-line inline-block text-[#8ea522]">
-              digital communication,
+              communication specialist,
             </span>{" "}
             <span className="bio-line inline-block">
-              I merge creative vision
+              I blend creative vision
             </span>{" "}
-            <span className="bio-line inline-block">with technical tools.</span>{" "}
+            <span className="bio-line inline-block">with technical mastery.</span>{" "}
 
             <span className="w-full h-6 md:h-12"></span>
 
             <span className="bio-line inline-block">
-              My goal is to enhance
+              My goal: boosting your
             </span>{" "}
-            <span className="bio-line inline-block">brand identity</span>{" "}
-            <span className="bio-line inline-block">and to maximize</span>{" "}
+            <span className="bio-line inline-block text-[#8ea522]">
+              online visibility
+            </span>{" "}
+            <span className="bio-line inline-block">and ensuring the impact</span>{" "}
             <span className="bio-line inline-block">
-              your message's impact.
+              of your every message.
             </span>
           </div>
         )}

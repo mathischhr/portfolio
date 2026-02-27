@@ -66,7 +66,7 @@ export default function ProjectUI({
     <div ref={container} className={`z-[150] ${isMobile ? "fixed inset-0 overflow-y-auto" : "absolute inset-0 pointer-events-none"}`} 
          style={isMobile ? { backgroundColor: project.bgColor, opacity: 0 } : {}}>
       
-      {/* --- DESIGN MOBILE (Titre SOUS l'image) --- */}
+      {/* --- DESIGN MOBILE --- */}
       {isMobile && (
         <div ref={mobileContent} className="relative flex flex-col w-full min-h-full pb-20">
           
@@ -86,6 +86,18 @@ export default function ProjectUI({
                 style={{ color: project.textColor }}>
               {lang === "fr" ? project.descFr : project.descEn}
             </p>
+
+            {/* AJOUT DES MISSIONS MOBILE */}
+            {project.missions && (
+              <ul className="mt-6 space-y-3">
+                {project.missions.map((m: string, i: number) => (
+                  <li key={i} className="flex items-start gap-2 text-[10px] uppercase font-medium leading-snug" style={{ color: project.textColor }}>
+                    <span className="opacity-50 mt-0.5">•</span>
+                    <span>{m}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
 
             <div className="mt-12 grid grid-cols-3 gap-4 border-t border-b py-6" style={{ borderColor: `${project.textColor}33` }}>
               <div className="flex flex-col text-left">
@@ -115,7 +127,7 @@ export default function ProjectUI({
         </div>
       )}
 
-      {/* --- DESIGN PC (Titre au CENTRE de l'image) --- */}
+      {/* --- DESIGN PC --- */}
       {!isMobile && (
         <>
           <div className="fixed top-12 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto">
@@ -141,7 +153,6 @@ export default function ProjectUI({
           <div
             className="absolute transition-all duration-[1100ms] ease-[cubic-bezier(0.76,0,0.24,1)] flex flex-col z-[20]"
             style={{
-              /* RÉGLAGE ICI : 50% en mode explore, 53% pour le descendre sur le slider */
               top: isExploring ? "50%" : "56%", 
               left: isExploring ? "8%" : "50%",
               transform: isExploring ? "translateY(-50%)" : "translate(-50%, -50%)",
@@ -168,9 +179,24 @@ export default function ProjectUI({
             </h1>
 
             <div className={`mt-10 flex flex-col gap-8 w-full transition-all duration-700 ${isExploring ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`} style={{ color: project.textColor }}>
-              <p className="text-[11px] font-mono uppercase tracking-widest max-w-sm opacity-80 leading-relaxed">
-                {lang === "fr" ? project.descFr : project.descEn}
-              </p>
+              <div className="space-y-6">
+                <p className="text-[11px] font-mono uppercase tracking-widest max-w-sm opacity-80 leading-relaxed">
+                  {lang === "fr" ? project.descFr : project.descEn}
+                </p>
+
+                {/* AJOUT DES MISSIONS PC */}
+                {project.missions && (
+                  <ul className="space-y-2 max-w-md">
+                    {project.missions.map((m: string, i: number) => (
+                      <li key={i} className="flex items-start gap-3 text-[9px] font-bold uppercase tracking-[0.1em] leading-relaxed">
+                        <span className="opacity-40">•</span>
+                        <span>{m}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
               <div className="flex gap-8">
                 {["date", "client", "role"].map(k => (
                   <div key={k} className="flex flex-col">

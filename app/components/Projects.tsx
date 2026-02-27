@@ -16,23 +16,29 @@ export default function Projects() {
   const projects = [
     {
       id: "ppm-nouvel-an",
-      title: lang === "fr" ? "ÉVÉNEMENTIEL & COMMUNICATION" : "EVENTS & COMMUNICATION",
-      role: lang === "fr" ? "Organisateur & Chargé de communication" : "Event Planner & Communication Manager",
-      desc: lang === "fr" ? "Organisation de la danse du lion pour le Nouvel An Chinois : coordination logistique, création graphique et captation vidéo." : "Organization of the Chinese New Year lion dance: logistics, graphic design, and video production.",
+      title: lang === "fr" ? "ÉVÉNEMENTIEL & STRATÉGIE" : "EVENTS & STRATEGY",
+      role: lang === "fr" ? "Organisateur & Communication" : "Event Planner & Communication",
+      desc: lang === "fr" 
+        ? "Direction complète d'un événement traditionnel pour Phnom Penh Market. Un succès public avec plus de 150 visiteurs et une visibilité locale boostée." 
+        : "Full management of a traditional event for Phnom Penh Market. A public success with over 150 visitors and boosted local visibility.",
       image: "/danse-lion4.jpg",
     },
     {
       id: "yschools-comm",
-      title: lang === "fr" ? "COMMUNICATION GLOBALE" : "GLOBAL COMMUNICATION",
+      title: lang === "fr" ? "COMMUNICATION 360°" : "360° COMMUNICATION",
       role: lang === "fr" ? "Chargé de communication" : "Communication Officer",
-      desc: lang === "fr" ? "Déploiement de la stratégie digitale, événementielle et print : création de contenus, gestion CRM et optimisation SEO." : "Deployment of digital, event, and print strategies: content creation, CRM management, and SEO optimization.",
+      desc: lang === "fr" 
+        ? "Gestion de la communication de l'école : de la création de contenus digitaux au pilotage CRM, pour une stratégie performante." 
+        : "School communication management: from digital content creation to CRM monitoring, ensuring a high-performing strategy.",
       image: "/yschools.jpg",
     },
     {
       id: "tricking-interview",
-      title: lang === "fr" ? "AUDIOVISUEL & RÉALISATION" : "AUDIOVISUAL & FILMMAKING",
-      role: lang === "fr" ? "Storyboarder & Chef éclairagiste" : "Storyboarder & Gaffer",
-      desc: lang === "fr" ? "Réalisation d'une interview immersive sur le Tricking : conception visuelle, mise en lumière et coordination technique." : "Creation of an immersive Tricking interview: visual design, lighting, and technical coordination.",
+      title: lang === "fr" ? "DIRECTION ARTISTIQUE" : "ART DIRECTION",
+      role: lang === "fr" ? "Storyboarder & Éclairagiste" : "Storyboarder & Gaffer",
+      desc: lang === "fr" 
+        ? "Conception visuelle d'une interview sportive. Travail sur l'ambiance lumineuse et la narration pour capturer l'énergie du tricking." 
+        : "Visual design for a sports interview. Focused on lighting ambiance and storytelling to capture the raw energy of tricking.",
       image: "/tricking-img.jpg",
     },
   ];
@@ -50,14 +56,6 @@ export default function Projects() {
         scrollTrigger: { trigger: container.current, start: "top 75%" },
       });
 
-      gsap.utils.toArray(".parallax-fast").forEach((layer) => {
-        gsap.to(layer as Element, {
-          y: -300,
-          rotation: 45,
-          ease: "none",
-          scrollTrigger: { trigger: container.current, scrub: 0.5 },
-        });
-      });
       gsap.utils.toArray(".parallax-slow").forEach((layer) => {
         gsap.to(layer as Element, {
           y: -100,
@@ -76,7 +74,7 @@ export default function Projects() {
       ref={container}
       className="relative py-24 md:py-32 px-6 md:px-24 bg-white text-zinc-900 overflow-hidden"
     >
-      {/* Décors avec pointer-events-none pour ne pas bloquer les clics */}
+      {/* Décors en arrière-plan */}
       <div className="parallax-slow absolute top-[5%] right-[5%] text-zinc-100 z-0 pointer-events-none">
         <svg width="300" height="300" viewBox="0 0 100 100" fill="currentColor" className="blur-xl opacity-50">
           <circle cx="50" cy="50" r="50" />
@@ -99,6 +97,7 @@ export default function Projects() {
               key={i}
               className={`project-card flex flex-col ${i % 2 !== 0 ? "md:flex-row-reverse" : "md:flex-row"} items-start md:items-center gap-8 md:gap-12 group/card`}
             >
+              {/* Image du projet */}
               <div className="w-full md:w-1/2 aspect-[4/3] bg-zinc-100 rounded-3xl overflow-hidden relative shadow-sm transition-shadow duration-500 hover:shadow-2xl hover:shadow-[#ea743f]/20">
                 <Image
                   src={proj.image}
@@ -107,9 +106,9 @@ export default function Projects() {
                   className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-black/10 z-10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
               </div>
 
+              {/* Infos du projet */}
               <div className="w-full md:w-1/2 space-y-4 md:space-y-5 px-2 md:px-0">
                 <p className="text-[#ea743f] font-bold tracking-widest text-xs md:text-sm uppercase">
                   {proj.role}
@@ -122,15 +121,19 @@ export default function Projects() {
                 </p>
 
                 <div className="pt-2">
-                  {/* MODIFICATION ICI : href="/projets" au lieu de href={`/projets/${proj.id}`} */}
                   <Link
                     href="/projets"
-                    className="group/btn inline-flex items-center gap-3 mt-2 md:mt-4 px-6 py-3 border border-zinc-300 text-zinc-700 rounded-full font-medium transition-all duration-300 hover:bg-[#ea743f] hover:border-[#ea743f] hover:text-white cursor-pointer"
+                    className="group/btn relative inline-flex items-center gap-3 mt-2 md:mt-4 px-6 py-3 border border-zinc-300 text-zinc-700 rounded-full font-medium transition-all duration-300 hover:border-[#ea743f] hover:text-white overflow-hidden"
                   >
-                    <span className="text-sm md:text-base">{lang === "fr" ? "Voir les détails" : "View details"}</span>
-                    <svg className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                    <span className="absolute inset-0 bg-[#ea743f] translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out"></span>
+                    <span className="relative z-10 flex items-center gap-3">
+                      <span className="text-sm md:text-base">
+                        {lang === "fr" ? "Voir les détails" : "View details"}
+                      </span>
+                      <svg className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </span>
                   </Link>
                 </div>
               </div>
@@ -138,13 +141,14 @@ export default function Projects() {
           ))}
         </div>
 
+        {/* Bouton global bas de page */}
         <div className="mt-24 md:mt-32 text-center">
           <Link
             href="/projets"
-            className="group relative inline-flex items-center justify-center px-8 py-4 text-base md:text-lg font-bold text-white bg-zinc-900 rounded-full overflow-hidden cursor-pointer"
+            className="group relative inline-flex items-center justify-center px-8 py-4 text-base md:text-lg font-bold text-white bg-zinc-900 rounded-full overflow-hidden"
           >
-            <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-[#ea743f] rounded-full group-hover:w-full group-hover:h-56"></span>
-            <span className="relative">
+            <span className="absolute inset-0 w-full h-full bg-[#ea743f] transition-all duration-500 ease-out scale-0 group-hover:scale-100 rounded-full"></span>
+            <span className="relative z-10">
               {lang === "fr" ? "Découvrir tous les projets" : "Discover all projects"}
             </span>
           </Link>
