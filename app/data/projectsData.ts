@@ -16,7 +16,7 @@ export const projectsData = [
       "Analyse de l'impact : événement désormais pérennisé au calendrier"
     ],
     image: "/ppm2.jpg",
-    link: "https://www.instagram.com/p/DFkaOYwCIXF/",
+    link: "https://www.instagram.com/p/DVYcaJMgn-R/?img_index=1",
     bgColor: "#1A1814",
     textColor: "#FFD25A"
   },
