@@ -153,7 +153,7 @@ export default function ProjectUI({
           <div
             className="absolute transition-all duration-[1100ms] ease-[cubic-bezier(0.76,0,0.24,1)] flex flex-col z-[20]"
             style={{
-              top: isExploring ? "50%" : "56%", 
+              top: isExploring ? "50%" : "65%", 
               left: isExploring ? "8%" : "50%",
               transform: isExploring ? "translateY(-50%)" : "translate(-50%, -50%)",
               width: isExploring ? "38vw" : "100%",

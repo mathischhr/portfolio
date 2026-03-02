@@ -1,4 +1,25 @@
 export const projectsData = [
+    {
+    id: "ppm-nouvel-an2",
+    title: "NOUVEL AN 2026",
+    client: "Phnom Penh Market",
+    role: "Organisateur, Communication & Photographe",
+    date: "2026",
+    descFr: "Organisation d'une danse du lion traditionnelle : +300 visiteurs accueillis.",
+    descEn: "Organization of a traditional lion dance : +300 visitors welcomed.",
+    missions: [
+      "Pilotage de l'organisation de A à Z et coordination logistique",
+      "Conception graphique des affiches et supports promotionnels",
+      "Stratégie de communication ciblée sur les réseaux sociaux",
+      "Reportage photo complet de l'événement",
+      "Captation vidéo et production de contenus pour la rétrospective",
+      "Analyse de l'impact : événement désormais pérennisé au calendrier"
+    ],
+    image: "/ppm2.jpg",
+    link: "https://www.instagram.com/p/DFkaOYwCIXF/",
+    bgColor: "#1A1814",
+    textColor: "#FFD25A"
+  },
   {
     id: "yschools-comm",
     title: "Y SCHOOLS",
@@ -59,8 +80,8 @@ export const projectsData = [
     textColor: "#A3E635"
   },
   {
-    id: "ppm-nouvel-an",
-    title: "NOUVEL AN",
+    id: "ppm-nouvel-an1",
+    title: "NOUVEL AN 2025",
     client: "Phnom Penh Market",
     role: "Organisateur & Communication",
     date: "2025",
@@ -73,7 +94,7 @@ export const projectsData = [
       "Captation vidéo et production de contenus pour la rétrospective",
       "Analyse de l'impact : événement désormais pérennisé au calendrier"
     ],
-    image: "/danse-lion4.jpg",
+    image: "/ppm1.jpg",
     link: "https://www.instagram.com/p/DFkaOYwCIXF/",
     bgColor: "#1A1814",
     textColor: "#FFD25A"

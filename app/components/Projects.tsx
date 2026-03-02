@@ -16,12 +16,12 @@ export default function Projects() {
   const projects = [
     {
       id: "ppm-nouvel-an",
-      title: lang === "fr" ? "ÉVÉNEMENTIEL & STRATÉGIE" : "EVENTS & STRATEGY",
-      role: lang === "fr" ? "Organisateur & Communication" : "Event Planner & Communication",
+      title: lang === "fr" ? "ÉVÉNEMENTIEL, STRATÉGIE & PHOTOGRAPHIE" : "EVENTS, STRATEGY & PHOTOGRAPHY",
+      role: lang === "fr" ? "Organisateur, Communication & Photographe" : "Event Planner, Communication & Photographer",
       desc: lang === "fr" 
-        ? "Direction complète d'un événement traditionnel pour Phnom Penh Market. Un succès public avec plus de 150 visiteurs et une visibilité locale boostée." 
+        ? "Direction complète d'un événement traditionnel pour Phnom Penh Market. Un succès public avec plus de 300 visiteurs et une visibilité locale boostée." 
         : "Full management of a traditional event for Phnom Penh Market. A public success with over 150 visitors and boosted local visibility.",
-      image: "/danse-lion4.jpg",
+      image: "/ppm2.jpg",
     },
     {
       id: "yschools-comm",
