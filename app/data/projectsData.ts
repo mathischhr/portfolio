@@ -13,12 +13,11 @@ export const projectsData = [
       "Stratégie de communication ciblée sur les réseaux sociaux",
       "Reportage photo complet de l'événement",
       "Captation vidéo et production de contenus pour la rétrospective",
-      "Analyse de l'impact : événement désormais pérennisé au calendrier"
     ],
     image: "/ppm2.jpg",
     link: "https://www.instagram.com/p/DVYcaJMgn-R/?img_index=1",
     bgColor: "#1A1814",
-    textColor: "#FFD25A"
+    textColor: "#ffc62a"
   },
   {
     id: "yschools-comm",
