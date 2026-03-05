@@ -25,7 +25,7 @@ export default function SkillsLogiciels() {
 
   const Content2 = () => (
     <span className="pr-8 md:pr-12">
-      <span className={bleu}>WORDPRESS</span> &nbsp;—&nbsp; <span className={orange}>FIGMA</span> &nbsp;—&nbsp; VS CODE &nbsp;—&nbsp; <span className={bleu}>GOOGLE ANALYTICS</span> &nbsp;—&nbsp; GIT/GITHUB &nbsp;—&nbsp;
+      <span className={bleu}>WORDPRESS</span> &nbsp;—&nbsp; <span className={orange}>FIGMA</span> &nbsp;—&nbsp; VS CODE &nbsp;—&nbsp; <span className={bleu}>GOOGLE ANALYTICS</span> &nbsp;—&nbsp; GIT/GITHUB &nbsp;—&nbsp; <span className={vert}>UNITY</span> &nbsp;—&nbsp; 
     </span>
   );
 
